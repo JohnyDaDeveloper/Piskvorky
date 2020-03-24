@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Piškvorky</string>
+
+    <string name="cross_won">Křížky vyhráli!</string>
+    <string name="circle_won">Kolečka vyhráli!</string>
+
+    <string name="chyba">Chyba!</string>
+
+    <string name="cross">Křížky</string>
+    <string name="circle">Kolečka</string>
+
+    <string name="room_id">Room ID</string>
+    <string name="join">Připojit</string>
+    <string name="no_room">no room</string>
+    <string name="coppied_to_clipboard">Coppied to clipboard!</string>
+    <string name="create">Založit</string>
+    <string name="playing_as">Hraješ za</string>
+</resources>
