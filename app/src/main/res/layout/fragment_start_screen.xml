@@ -7,33 +7,47 @@
     android:gravity="center"
     android:padding="20dp">
 
-    <LinearLayout
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:src="@drawable/ic_icon" />
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp"
         android:gravity="center">
 
         <EditText
             android:id="@+id/roomIdExitText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minWidth="200dp"
             android:inputType="textNoSuggestions"
             android:hint="@string/room_id"
+            android:layout_toStartOf="@id/joinRoomButtom"
             android:importantForAutofill="no" />
 
         <Button
             android:id="@+id/joinRoomButtom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
             android:text="@string/join" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <Button
         android:id="@+id/createRoomButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="@string/create" />
+        android:text="@string/create_online" />
+
+    <Button
+        android:id="@+id/playOfflineButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/play_offline" />
 </LinearLayout>

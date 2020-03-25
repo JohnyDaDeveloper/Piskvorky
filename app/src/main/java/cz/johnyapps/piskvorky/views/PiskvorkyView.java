@@ -11,6 +11,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 
+import cz.johnyapps.piskvorky.GameModes;
 import cz.johnyapps.piskvorky.entities.BoardSettings;
 import cz.johnyapps.piskvorky.entities.Field;
 import cz.johnyapps.piskvorky.services.PiskvorkyService;
@@ -19,7 +20,7 @@ import cz.johnyapps.piskvorky.shapes.Shapes;
 import cz.johnyapps.piskvorky.shapes.shape.Shape;
 
 @SuppressWarnings("SuspiciousNameCombination")
-public class PiskvorkyView extends View implements View.OnTouchListener, Shapes {
+public class PiskvorkyView extends View implements View.OnTouchListener, Shapes, GameModes {
     private static final String TAG = "PiskvorkyView";
     private static final int WAY_DIAGONAL_LEFT = -1;
     private static final int WAY_BELLOW = 0;
@@ -110,9 +111,11 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes 
     private void clickField(int index) {
         PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
 
-        if (piskvorkyService.getMyPlayer() != piskvorkyService.getPlayingPlayerShape()) {
-            Log.v(TAG, "clickField: not my move");
-            return;
+        if (piskvorkyService.getGameMode().equals(ONLINE)) {
+            if (piskvorkyService.getMyPlayer() != piskvorkyService.getPlayingPlayerShape()) {
+                Log.v(TAG, "clickField: not my move");
+                return;
+            }
         }
 
         ArrayList<Field> fields = piskvorkyService.getFieldsArray();

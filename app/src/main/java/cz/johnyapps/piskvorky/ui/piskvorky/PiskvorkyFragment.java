@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 import cz.johnyapps.piskvorky.R;
 import cz.johnyapps.piskvorky.entities.Field;
+import cz.johnyapps.piskvorky.GameModes;
 import cz.johnyapps.piskvorky.services.PiskvorkyService;
 import cz.johnyapps.piskvorky.shapes.Shapes;
 import cz.johnyapps.piskvorky.shapes.shape.Shape;
@@ -31,7 +32,7 @@ import cz.johnyapps.piskvorky.shapes.shape.base.Cross;
 import cz.johnyapps.piskvorky.views.PiskvorkyView;
 
 @SuppressLint("SetTextI18n")
-public class PiskvorkyFragment extends Fragment implements Shapes {
+public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
     private static final String TAG = "PiskvorkyFragment";
 
     @Nullable
@@ -58,13 +59,20 @@ public class PiskvorkyFragment extends Fragment implements Shapes {
             return;
         }
 
+        PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
         TextView playingAsTextView = root.findViewById(R.id.playingAsTextView);
-        Shape playingAs = PiskvorkyService.getInstance().getMyPlayer();
 
-        if (playingAs == Shapes.CROSS) {
-            playingAsTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cross, 0);
+        if (piskvorkyService.getGameMode().equals(OFFLINE)) {
+            playingAsTextView.setVisibility(View.GONE);
         } else {
-            playingAsTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.circle, 0);
+            playingAsTextView.setVisibility(View.VISIBLE);
+            Shape playingAs = PiskvorkyService.getInstance().getMyPlayer();
+
+            if (playingAs == Shapes.CROSS) {
+                playingAsTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cross, 0);
+            } else {
+                playingAsTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.circle, 0);
+            }
         }
     }
 
@@ -114,12 +122,16 @@ public class PiskvorkyFragment extends Fragment implements Shapes {
             }
         });
 
-        piskvorkyService.getGameReference().observe(this, new Observer<DocumentReference>() {
-            @Override
-            public void onChanged(DocumentReference documentReference) {
-                setupRoomId(documentReference);
-            }
-        });
+        if (piskvorkyService.getGameMode().equals(OFFLINE)) {
+            setupRoomId(null);
+        } else {
+            piskvorkyService.getGameReference().observe(this, new Observer<DocumentReference>() {
+                @Override
+                public void onChanged(DocumentReference documentReference) {
+                    setupRoomId(documentReference);
+                }
+            });
+        }
     }
 
     private void setupRoomId(DocumentReference documentReference) {

@@ -31,6 +31,27 @@ public class StartScreenFragment extends Fragment {
         super.onStart();
         setupJoinButton();
         setupCreateButton();
+        setupOfflineButton();
+    }
+
+    private void setupOfflineButton() {
+        View root = getView();
+
+        if (root == null) {
+            Log.w(TAG, "setupOfflineButton: root is null!");
+            return;
+        }
+
+        Button offlineButton = root.findViewById(R.id.playOfflineButton);
+        offlineButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
+                piskvorkyService.createOfflineGame();
+
+                showGame();
+            }
+        });
     }
 
     private void setupCreateButton() {
@@ -47,7 +68,7 @@ public class StartScreenFragment extends Fragment {
             public void onClick(View view) {
                 PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
                 piskvorkyService.setMyPlayer(Shapes.CROSS);
-                piskvorkyService.startGame();
+                piskvorkyService.createOnlineGame();
 
                 showGame();
             }

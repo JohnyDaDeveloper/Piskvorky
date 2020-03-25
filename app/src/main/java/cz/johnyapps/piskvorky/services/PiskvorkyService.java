@@ -17,13 +17,14 @@ import java.util.ArrayList;
 
 import cz.johnyapps.piskvorky.entities.BoardSettings;
 import cz.johnyapps.piskvorky.entities.Field;
+import cz.johnyapps.piskvorky.GameModes;
 import cz.johnyapps.piskvorky.internet.PiskvorkyExporter;
 import cz.johnyapps.piskvorky.internet.PiskvorkyImporter;
 import cz.johnyapps.piskvorky.shapes.Shapes;
 import cz.johnyapps.piskvorky.shapes.shape.Shape;
 import cz.johnyapps.piskvorky.shapes.shape.base.NoShape;
 
-public class PiskvorkyService implements Shapes {
+public class PiskvorkyService implements Shapes, GameModes {
     private static final String TAG = "PiskvorkyService";
     private static final PiskvorkyService instance = new PiskvorkyService();
 
@@ -36,6 +37,7 @@ public class PiskvorkyService implements Shapes {
     private MutableLiveData<Shape> playingPlayer;
 
     private Shape myPlayer;
+    private String gameMode;
 
     private PiskvorkyService() {
         boardSettings = new BoardSettings();
@@ -65,13 +67,21 @@ public class PiskvorkyService implements Shapes {
         return database.collection("games");
     }
 
-    public void startGame() {
+    public void createOfflineGame() {
+        gameMode = OFFLINE;
+    }
+
+    public void createOnlineGame() {
+        gameMode = ONLINE;
+
         DocumentReference documentReference = piskvorkyExporter.createGame(boardSettings);
         gameReference.setValue(documentReference);
     }
 
     public void updateGame() {
-        piskvorkyExporter.updateGame(gameReference.getValue());
+        if (getGameMode().equals(ONLINE)) {
+            piskvorkyExporter.updateGame(gameReference.getValue());
+        }
     }
 
     public LiveData<ArrayList<Field>> getFields() {
@@ -156,5 +166,9 @@ public class PiskvorkyService implements Shapes {
         }
 
         return documentReference.getId();
+    }
+
+    public String getGameMode() {
+        return gameMode;
     }
 }
