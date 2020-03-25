@@ -20,13 +20,29 @@
         android:layout_width="match_parent"
         android:layout_height="0dp" />
 
-    <TextView
-        android:id="@+id/roomIdTextView"
+    <RelativeLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/room_id" />
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/roomIdTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_centerVertical="true"
+            android:text="@string/room_id" />
+
+        <ImageView
+            android:id="@+id/shareRoomButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/roomIdTextView"
+            android:layout_marginStart="10dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/share" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/playingAsTextView"

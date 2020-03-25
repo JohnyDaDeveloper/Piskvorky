@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -143,11 +144,13 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
         }
 
         TextView roomIdTextView = root.findViewById(R.id.roomIdTextView);
+        View shareRoomButton = root.findViewById(R.id.shareRoomButton);
         String roomId = getString(R.string.room_id);
 
         if (documentReference == null) {
             roomIdTextView.setText(roomId + ": " + getString(R.string.no_room));
             roomIdTextView.setOnClickListener(null);
+            shareRoomButton.setVisibility(View.GONE);
         } else {
             roomIdTextView.setText(roomId + ": " + documentReference.getId());
             roomIdTextView.setOnClickListener(new View.OnClickListener() {
@@ -159,7 +162,6 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
                         Log.w(TAG, "setupRoomId: onClick: context is null");
                         return;
                     }
-                    String roomId = getString(R.string.room_id);
 
                     ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
 
@@ -168,10 +170,26 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
                         return;
                     }
 
+                    String roomId = getString(R.string.room_id);
                     ClipData clip = ClipData.newPlainText(roomId, PiskvorkyService.getInstance().getGameId());
                     clipboard.setPrimaryClip(clip);
 
                     Toast.makeText(context, R.string.coppied_to_clipboard, Toast.LENGTH_LONG).show();
+                }
+            });
+
+            shareRoomButton.setVisibility(View.VISIBLE);
+            shareRoomButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, PiskvorkyService.getInstance().getGameId());
+                    sendIntent.setType("text/plain");
+
+                    String roomId = getString(R.string.room_id);
+                    Intent shareIntent = Intent.createChooser(sendIntent, roomId);
+                    startActivity(shareIntent);
                 }
             });
         }
