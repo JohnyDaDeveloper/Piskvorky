@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import cz.johnyapps.piskvorky.GameModes;
 import cz.johnyapps.piskvorky.R;
 import cz.johnyapps.piskvorky.internet.PiskvorkyImporter;
 import cz.johnyapps.piskvorky.services.PiskvorkyService;
@@ -98,6 +99,7 @@ public class StartScreenFragment extends Fragment {
 
                 PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
                 piskvorkyService.setMyPlayer(Shapes.CIRCLE);
+                piskvorkyService.setGameMode(GameModes.ONLINE);
 
                 PiskvorkyImporter importer = new PiskvorkyImporter();
                 importer.importGame(roomId);

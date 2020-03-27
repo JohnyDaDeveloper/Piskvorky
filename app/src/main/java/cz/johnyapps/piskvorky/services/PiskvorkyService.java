@@ -171,4 +171,8 @@ public class PiskvorkyService implements Shapes, GameModes {
     public String getGameMode() {
         return gameMode;
     }
+
+    public void setGameMode(String gameMode) {
+        this.gameMode = gameMode;
+    }
 }
