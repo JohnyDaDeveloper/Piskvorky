@@ -7,11 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import cz.johnyapps.piskvorky.BuildConfig;
 import cz.johnyapps.piskvorky.GameModes;
 import cz.johnyapps.piskvorky.R;
 import cz.johnyapps.piskvorky.internet.PiskvorkyImporter;
@@ -33,6 +35,19 @@ public class StartScreenFragment extends Fragment {
         setupJoinButton();
         setupCreateButton();
         setupOfflineButton();
+        setupVersion();
+    }
+
+    private void  setupVersion() {
+        View root = getView();
+
+        if (root == null) {
+            Log.w(TAG, "setupVersion: root is null!");
+            return;
+        }
+
+        TextView version = root.findViewById(R.id.version);
+        version.setText(BuildConfig.VERSION_NAME);
     }
 
     private void setupOfflineButton() {
