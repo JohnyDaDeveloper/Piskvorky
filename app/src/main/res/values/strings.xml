@@ -12,7 +12,7 @@
     <string name="room_id">Room ID</string>
     <string name="join">Připojit</string>
     <string name="no_room">no room</string>
-    <string name="coppied_to_clipboard">Coppied to clipboard!</string>
+    <string name="coppied_to_clipboard">Zkopírováno do schránky!</string>
     <string name="create_online">Založit místnost</string>
     <string name="playing_as">Hraješ za</string>
     <string name="play_offline">Hrát offline</string>
