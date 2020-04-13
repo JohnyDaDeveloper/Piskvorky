@@ -15,6 +15,7 @@ import cz.johnyapps.piskvorky.GameModes;
 import cz.johnyapps.piskvorky.entities.BoardSettings;
 import cz.johnyapps.piskvorky.entities.Field;
 import cz.johnyapps.piskvorky.services.PiskvorkyService;
+import cz.johnyapps.piskvorky.shapes.NewGameStartsShape;
 import cz.johnyapps.piskvorky.shapes.ShapeDrawer;
 import cz.johnyapps.piskvorky.shapes.Shapes;
 import cz.johnyapps.piskvorky.shapes.shape.Shape;
@@ -46,10 +47,20 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
 
     private void initialize() {
         PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
-        boardSettings = piskvorkyService.getBoardSettings();
+        piskvorkyService.setOnNewGameListener(new PiskvorkyService.OnNewGameListener() {
+            @Override
+            public void onNewGame() {
+                setSelfAsOnTouchListener();
+            }
+        });
 
+        boardSettings = piskvorkyService.getBoardSettings();
         shapeDrawer = new ShapeDrawer(boardSettings.getShapeWidth(), boardSettings.getShapePadding());
 
+        setOnTouchListener(this);
+    }
+
+    private void setSelfAsOnTouchListener() {
         setOnTouchListener(this);
     }
 
@@ -129,7 +140,7 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
         field.setShape(piskvorkyService.getPlayingPlayerShape());
         piskvorkyService.setFields(fields);
         switchPlayer();
-        piskvorkyService.updateGame();
+        piskvorkyService.updateGame(false);
     }
 
     private void restartGame() {
@@ -138,12 +149,12 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
         calculateFields();
 
         PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
-        piskvorkyService.setPlayingPlayer(CROSS);
+        piskvorkyService.setPlayingPlayer(NewGameStartsShape.get());
 
         setOnTouchListener(this);
 
         piskvorkyService.removeFields();
-        piskvorkyService.updateGame();
+        piskvorkyService.updateGame(true);
 
         invalidate();
     }

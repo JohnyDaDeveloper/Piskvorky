@@ -41,7 +41,7 @@ public class PiskvorkyImporter {
         gameReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                processDocumentSnapshot(documentSnapshot);
+                processGameSnapshot(documentSnapshot);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -53,7 +53,7 @@ public class PiskvorkyImporter {
         piskvorkyService.setGameReference(gameReference);
     }
 
-    public void processDocumentSnapshot(@Nullable DocumentSnapshot documentSnapshot) {
+    public void processGameSnapshot(@Nullable DocumentSnapshot documentSnapshot) {
         if (documentSnapshot != null && documentSnapshot.exists()) {
             @SuppressWarnings("unchecked")
             Map<String, Object> fields = (Map<String, Object>) documentSnapshot.get("fields");
@@ -65,8 +65,10 @@ public class PiskvorkyImporter {
             }
 
             int playingPlayer = Integer.parseInt(String.valueOf(documentSnapshot.get("playingPlayer")));
+            boolean newGame = Boolean.parseBoolean(String.valueOf(documentSnapshot.get("newGame")));
 
             PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
+            piskvorkyService.setNewGame(newGame);
             piskvorkyService.setPlayingPlayer(Shape.idToShape(playingPlayer));
         } else {
             Log.w(TAG, "processDocumentSnapshot: document not found");

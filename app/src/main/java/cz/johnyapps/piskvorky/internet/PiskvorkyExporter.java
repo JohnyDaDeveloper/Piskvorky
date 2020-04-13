@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,8 +20,6 @@ public class PiskvorkyExporter {
     public PiskvorkyExporter() {
 
     }
-
-
 
     public DocumentReference createGame(BoardSettings boardSettings) {
         Log.v(TAG, "createGame");
@@ -41,20 +38,21 @@ public class PiskvorkyExporter {
         map.put("playingPlayer", piskvorkyService.getPlayingPlayerId());
         map.put("settings", boardSettings.toMap());
         map.put("fields", fieldsToMap());
+        map.put("newGame", true);
 
         gameReference.set(map);
         return gameReference;
     }
 
-    public void updateGame(DocumentReference gameReference) {
+    public void updateGame(DocumentReference gameReference, boolean newGame) {
         if (gameReference == null) {
             Log.e(TAG, "updateGame: Document reference is null");
             return;
         }
 
         PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
-
         Map<String, Object> fields = fieldsToMap();
+
         int playingPlayerId = piskvorkyService.getPlayingPlayerId();
 
         Log.v(TAG, "updateGame: " + fields.size() + " fields, playing player: " + playingPlayerId);
@@ -62,6 +60,7 @@ public class PiskvorkyExporter {
         Map<String, Object> map = new HashMap<>();
         map.put("fields", fields);
         map.put("playingPlayer", playingPlayerId);
+        map.put("newGame", newGame);
         gameReference.update(map);
     }
 

@@ -224,6 +224,8 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
     }
 
     private void shapeWon(Shape shape) {
+        PiskvorkyService.getInstance().setLastGameWonShape(shape);
+
         View root = getView();
 
         if (root == null) {

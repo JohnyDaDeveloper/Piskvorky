@@ -35,6 +35,7 @@ public class PiskvorkyService implements Shapes, GameModes {
     private MutableLiveData<DocumentReference> gameReference;
     private MutableLiveData<ArrayList<Field>> fields;
     private MutableLiveData<Shape> playingPlayer;
+    private MutableLiveData<Shape> lastGameWonShape;
 
     private Shape myPlayer;
     private String gameMode;
@@ -47,7 +48,23 @@ public class PiskvorkyService implements Shapes, GameModes {
         gameReference = new MutableLiveData<>();
         fields = new MutableLiveData<>();
         playingPlayer = new MutableLiveData<>();
+        lastGameWonShape = new MutableLiveData<>();
         playingPlayer.setValue(CROSS);
+    }
+
+    public void setNewGame(boolean newGame) {
+        if (newGame && onNewGameListener != null) {
+            onNewGameListener.onNewGame();
+        }
+    }
+
+    private OnNewGameListener onNewGameListener;
+    public interface OnNewGameListener {
+        void onNewGame();
+    }
+
+    public void setOnNewGameListener(OnNewGameListener onNewGameListener) {
+        this.onNewGameListener = onNewGameListener;
     }
 
     public static PiskvorkyService getInstance() {
@@ -78,9 +95,9 @@ public class PiskvorkyService implements Shapes, GameModes {
         gameReference.setValue(documentReference);
     }
 
-    public void updateGame() {
+    public void updateGame(boolean newGame) {
         if (getGameMode().equals(ONLINE)) {
-            piskvorkyExporter.updateGame(gameReference.getValue());
+            piskvorkyExporter.updateGame(gameReference.getValue(), newGame);
         }
     }
 
@@ -118,6 +135,20 @@ public class PiskvorkyService implements Shapes, GameModes {
         return NoShape.ID;
     }
 
+    public void setLastGameWonShape(Shape lastGameWonShape) {
+        this.lastGameWonShape.setValue(lastGameWonShape);
+    }
+
+    public int getLastGameWonShape() {
+        Shape shape = lastGameWonShape.getValue();
+
+        if (shape != null) {
+            return shape.getId();
+        }
+
+        return NoShape.ID;
+    }
+
     public Shape getPlayingPlayerShape() {
         Shape shape = playingPlayer.getValue();
         return shape == null ? NO_SHAPE : shape;
@@ -141,7 +172,7 @@ public class PiskvorkyService implements Shapes, GameModes {
                     return;
                 }
 
-                piskvorkyImporter.processDocumentSnapshot(documentSnapshot);
+                piskvorkyImporter.processGameSnapshot(documentSnapshot);
             }
         });
     }
