@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 
 import java.util.ArrayList;
@@ -166,25 +167,7 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
             roomIdTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Context context = getContext();
-
-                    if (context == null) {
-                        Log.w(TAG, "setupRoomId: onClick: context is null");
-                        return;
-                    }
-
-                    ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-
-                    if (clipboard == null) {
-                        Log.w(TAG, "setupRoomId: onClick: clipboard is null");
-                        return;
-                    }
-
-                    String roomId = getString(R.string.room_id);
-                    ClipData clip = ClipData.newPlainText(roomId, PiskvorkyService.getInstance().getGameId());
-                    clipboard.setPrimaryClip(clip);
-
-                    Toast.makeText(context, R.string.coppied_to_clipboard, Toast.LENGTH_LONG).show();
+                    copyRoomIdToClipboard();
                 }
             });
 
@@ -203,6 +186,35 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
                 }
             });
         }
+    }
+
+    private void copyRoomIdToClipboard() {
+        View root = getView();
+
+        if (root == null) {
+            Log.w(TAG, "copyRoomIdToClipboard: root is null!");
+            return;
+        }
+
+        Context context = getContext();
+
+        if (context == null) {
+            Log.w(TAG, "copyRoomIdToClipboard: onClick: context is null");
+            return;
+        }
+
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+
+        if (clipboard == null) {
+            Log.w(TAG, "copyRoomIdToClipboard: onClick: clipboard is null");
+            return;
+        }
+
+        String roomId = getString(R.string.room_id);
+        ClipData clip = ClipData.newPlainText(roomId, PiskvorkyService.getInstance().getGameId());
+        clipboard.setPrimaryClip(clip);
+
+        Snackbar.make(root, R.string.coppied_to_clipboard, Snackbar.LENGTH_LONG).show();
     }
 
     private void showPlayingShape(Shape shape) {
