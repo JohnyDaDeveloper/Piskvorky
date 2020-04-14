@@ -52,6 +52,16 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
         PiskvorkyService.getInstance().setFirestoreGameChangedListener();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
+        if (piskvorkyService.amIHost()) {
+            piskvorkyService.destroyGame();
+        }
+    }
+
     private void setupPlayingAs() {
         View root = getView();
 

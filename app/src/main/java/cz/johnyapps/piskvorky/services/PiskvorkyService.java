@@ -2,10 +2,13 @@ package cz.johnyapps.piskvorky.services;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -39,6 +42,7 @@ public class PiskvorkyService implements Shapes, GameModes {
 
     private Shape myPlayer;
     private String gameMode;
+    private boolean amIHost;
 
     private PiskvorkyService() {
         boardSettings = new BoardSettings();
@@ -50,6 +54,28 @@ public class PiskvorkyService implements Shapes, GameModes {
         playingPlayer = new MutableLiveData<>();
         lastGameWonShape = new MutableLiveData<>();
         playingPlayer.setValue(CROSS);
+        amIHost = false;
+    }
+
+    public boolean amIHost() {
+        return amIHost;
+    }
+
+    public void  destroyGame() {
+        DocumentReference game = gameReference.getValue();
+
+        if (game != null) {
+            final String gameId = game.getId();
+
+            game.delete()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Log.i(TAG, "destroyGame: game " + gameId + " was " +
+                                    (task.isSuccessful() ? "deleted successfully" : "not deleted"));
+                        }
+                    });
+        }
     }
 
     public void setNewGame(boolean newGame) {
@@ -86,10 +112,12 @@ public class PiskvorkyService implements Shapes, GameModes {
 
     public void createOfflineGame() {
         gameMode = OFFLINE;
+        amIHost = true;
     }
 
     public void createOnlineGame() {
         gameMode = ONLINE;
+        amIHost = true;
 
         DocumentReference documentReference = piskvorkyExporter.createGame(boardSettings);
         gameReference.setValue(documentReference);
