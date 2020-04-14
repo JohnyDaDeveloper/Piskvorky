@@ -2,6 +2,8 @@ package cz.johnyapps.piskvorky.internet;
 
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 
@@ -39,6 +41,7 @@ public class PiskvorkyExporter {
         map.put("settings", boardSettings.toMap());
         map.put("fields", fieldsToMap());
         map.put("newGame", true);
+        map.put("lastMove", -1);
 
         gameReference.set(map);
         return gameReference;
@@ -54,6 +57,7 @@ public class PiskvorkyExporter {
         Map<String, Object> fields = fieldsToMap();
 
         int playingPlayerId = piskvorkyService.getPlayingPlayerId();
+        int lastMoveIndex = piskvorkyService.getLastMoveIndex();
 
         Log.v(TAG, "updateGame: " + fields.size() + " fields, playing player: " + playingPlayerId);
 
@@ -61,6 +65,7 @@ public class PiskvorkyExporter {
         map.put("fields", fields);
         map.put("playingPlayer", playingPlayerId);
         map.put("newGame", newGame);
+        map.put("lastMove", lastMoveIndex);
         gameReference.update(map);
     }
 

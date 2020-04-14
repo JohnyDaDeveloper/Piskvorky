@@ -65,9 +65,11 @@ public class PiskvorkyImporter {
             }
 
             int playingPlayer = Integer.parseInt(String.valueOf(documentSnapshot.get("playingPlayer")));
+            int lastMoveIndex = Integer.parseInt(String.valueOf(documentSnapshot.get("lastMove")));
             boolean newGame = Boolean.parseBoolean(String.valueOf(documentSnapshot.get("newGame")));
 
             PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
+            piskvorkyService.setLastMoveIndex(lastMoveIndex);
             piskvorkyService.setNewGame(newGame);
             piskvorkyService.setPlayingPlayer(Shape.idToShape(playingPlayer));
         } else {

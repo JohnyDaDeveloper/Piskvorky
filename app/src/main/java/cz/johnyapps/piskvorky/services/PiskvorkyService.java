@@ -43,6 +43,11 @@ public class PiskvorkyService implements Shapes, GameModes {
     private Shape myPlayer;
     private String gameMode;
     private boolean amIHost;
+    private int lastMoveIndex;
+
+    public static PiskvorkyService getInstance() {
+        return instance;
+    }
 
     private PiskvorkyService() {
         boardSettings = new BoardSettings();
@@ -55,6 +60,15 @@ public class PiskvorkyService implements Shapes, GameModes {
         lastGameWonShape = new MutableLiveData<>();
         playingPlayer.setValue(CROSS);
         amIHost = false;
+        lastMoveIndex = -1;
+    }
+
+    public int getLastMoveIndex() {
+        return lastMoveIndex;
+    }
+
+    public void setLastMoveIndex(int lastMoveIndex) {
+        this.lastMoveIndex = lastMoveIndex;
     }
 
     public boolean amIHost() {
@@ -91,10 +105,6 @@ public class PiskvorkyService implements Shapes, GameModes {
 
     public void setOnNewGameListener(OnNewGameListener onNewGameListener) {
         this.onNewGameListener = onNewGameListener;
-    }
-
-    public static PiskvorkyService getInstance() {
-        return instance;
     }
 
     public Shape getMyPlayer() {
@@ -143,6 +153,16 @@ public class PiskvorkyService implements Shapes, GameModes {
 
     public ArrayList<Field> getFieldsArray() {
         return fields.getValue();
+    }
+
+    public Field getField(int i) {
+        ArrayList<Field> fields = this.fields.getValue();
+
+        if (fields == null || i < 0 || i > fields.size() - 1) {
+            return null;
+        }
+
+        return fields.get(i);
     }
 
     public LiveData<Shape> getPlayingPlayer() {
