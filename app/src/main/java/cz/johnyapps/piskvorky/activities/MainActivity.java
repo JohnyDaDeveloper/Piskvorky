@@ -6,10 +6,14 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
 import cz.johnyapps.piskvorky.R;
+import cz.johnyapps.piskvorky.SharedPreferencesNames;
+import cz.johnyapps.piskvorky.services.PiskvorkyService;
 import cz.johnyapps.piskvorky.shapes.Shapes;
 import cz.johnyapps.piskvorky.ui.main.MainViewModel;
 import cz.johnyapps.piskvorky.ui.piskvorky.PiskvorkyFragment;
@@ -19,12 +23,21 @@ public class MainActivity extends AppCompatActivity implements Shapes {
     private static final String TAG = "MainActivity";
 
     private MainViewModel viewModel;
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        prefs = getSharedPreferences(SharedPreferencesNames.NAME, Context.MODE_PRIVATE);
+
+        loadCachedData();
         setContentView(R.layout.activity_main);
         setupViewModel();
+    }
+
+    private void loadCachedData() {
+        PiskvorkyService.getInstance().setHighlightLastMove(prefs.getBoolean(SharedPreferencesNames.HIGHLIGHT_LAST_MOVE, true));
     }
 
     private void setupViewModel() {

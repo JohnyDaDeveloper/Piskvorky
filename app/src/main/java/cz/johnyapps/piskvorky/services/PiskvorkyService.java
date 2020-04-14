@@ -44,6 +44,7 @@ public class PiskvorkyService implements Shapes, GameModes {
     private String gameMode;
     private boolean amIHost;
     private int lastMoveIndex;
+    private boolean highlightLastMove;
 
     public static PiskvorkyService getInstance() {
         return instance;
@@ -61,6 +62,28 @@ public class PiskvorkyService implements Shapes, GameModes {
         playingPlayer.setValue(CROSS);
         amIHost = false;
         lastMoveIndex = -1;
+        highlightLastMove = true;
+    }
+
+    private OnHighlightLastMoveChangedListener onHighlightLastMoveChangedListener;
+    public interface OnHighlightLastMoveChangedListener {
+        void onChange(boolean highlight);
+    }
+
+    public void setOnHighlightLastMoveChangedListener(OnHighlightLastMoveChangedListener onHighlightLastMoveChangedListener) {
+        this.onHighlightLastMoveChangedListener = onHighlightLastMoveChangedListener;
+    }
+
+    public boolean getHighlightLastMove() {
+        return highlightLastMove;
+    }
+
+    public void setHighlightLastMove(boolean highlightLastMove) {
+        this.highlightLastMove = highlightLastMove;
+
+        if (onHighlightLastMoveChangedListener != null) {
+            onHighlightLastMoveChangedListener.onChange(highlightLastMove);
+        }
     }
 
     public int getLastMoveIndex() {

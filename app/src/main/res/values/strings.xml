@@ -16,4 +16,5 @@
     <string name="create_online">Založit místnost</string>
     <string name="playing_as">Hraješ za</string>
     <string name="play_offline">Hrát offline</string>
+    <string name="highlight_last_move">Zvýrazňit poslední tah</string>
 </resources>

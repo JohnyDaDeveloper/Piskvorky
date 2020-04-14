@@ -5,11 +5,14 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +27,7 @@ import com.google.firebase.firestore.DocumentReference;
 import java.util.ArrayList;
 
 import cz.johnyapps.piskvorky.R;
+import cz.johnyapps.piskvorky.SharedPreferencesNames;
 import cz.johnyapps.piskvorky.entities.Field;
 import cz.johnyapps.piskvorky.GameModes;
 import cz.johnyapps.piskvorky.services.PiskvorkyService;
@@ -37,10 +41,23 @@ import cz.johnyapps.piskvorky.views.PiskvorkyView;
 public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
     private static final String TAG = "PiskvorkyFragment";
 
+    private SharedPreferences prefs;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        prefs = requireContext().getSharedPreferences(SharedPreferencesNames.NAME, Context.MODE_PRIVATE);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_piskvorky, container, false);
+        View root = inflater.inflate(R.layout.fragment_piskvorky, container, false);
+
+        setupHighlightLastMove(root);
+
+        return root;
     }
 
     @Override
@@ -61,6 +78,18 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
         if (piskvorkyService.amIHost()) {
             piskvorkyService.destroyGame();
         }
+    }
+
+    private void setupHighlightLastMove(@NonNull View root) {
+        Switch highlightLastSwitch = root.findViewById(R.id.highlightLastSwitch);
+        highlightLastSwitch.setChecked(PiskvorkyService.getInstance().getHighlightLastMove());
+        highlightLastSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                prefs.edit().putBoolean(SharedPreferencesNames.HIGHLIGHT_LAST_MOVE, b).apply();
+                PiskvorkyService.getInstance().setHighlightLastMove(b);
+            }
+        });
     }
 
     private void setupPlayingAs() {

@@ -55,4 +55,13 @@
         android:gravity="center"
         android:layout_gravity="start"
         android:text="@string/playing_as" />
+
+    <Switch
+        android:id="@+id/highlightLastSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="?android:textColorSecondary"
+        android:checked="true"
+        android:padding="5dp"
+        android:text="@string/highlight_last_move" />
 </LinearLayout>

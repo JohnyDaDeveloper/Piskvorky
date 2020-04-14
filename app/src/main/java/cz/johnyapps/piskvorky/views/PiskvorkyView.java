@@ -54,6 +54,12 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
                 setSelfAsOnTouchListener();
             }
         });
+        piskvorkyService.setOnHighlightLastMoveChangedListener(new PiskvorkyService.OnHighlightLastMoveChangedListener() {
+            @Override
+            public void onChange(boolean highlight) {
+                invalidate();
+            }
+        });
 
         boardSettings = piskvorkyService.getBoardSettings();
         shapeDrawer = new ShapeDrawer(boardSettings.getShapeWidth(), boardSettings.getShapePadding());
@@ -113,10 +119,16 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
     }
 
     private void fillLastMoveField(Canvas canvas) {
-        Field field = PiskvorkyService.getInstance().getField(PiskvorkyService.getInstance().getLastMoveIndex());
-        
-        if (field != null) {
-            canvas.drawRect(field.getWidthStart(), field.getHeightStart(), field.getWidthEnd(), field.getHeightEnd(), lastMovePaint);
+        if (PiskvorkyService.getInstance().getHighlightLastMove()) {
+            Field field = PiskvorkyService.getInstance().getField(PiskvorkyService.getInstance().getLastMoveIndex());
+
+            if (field != null) {
+                canvas.drawRect(field.getWidthStart(),
+                        field.getHeightStart(),
+                        field.getWidthEnd(),
+                        field.getHeightEnd(),
+                        lastMovePaint);
+            }
         }
     }
 
