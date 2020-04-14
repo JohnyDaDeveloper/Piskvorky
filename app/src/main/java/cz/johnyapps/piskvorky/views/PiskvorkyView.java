@@ -114,7 +114,6 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
 
     private void fillLastMoveField(Canvas canvas) {
         Field field = PiskvorkyService.getInstance().getField(PiskvorkyService.getInstance().getLastMoveIndex());
-        Log.d(TAG, "fillLastMoveField: " + PiskvorkyService.getInstance().getLastMoveIndex());
         
         if (field != null) {
             canvas.drawRect(field.getWidthStart(), field.getHeightStart(), field.getWidthEnd(), field.getHeightEnd(), lastMovePaint);

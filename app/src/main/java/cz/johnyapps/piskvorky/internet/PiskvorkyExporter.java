@@ -2,8 +2,6 @@ package cz.johnyapps.piskvorky.internet;
 
 import android.util.Log;
 
-import androidx.annotation.Nullable;
-
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 
