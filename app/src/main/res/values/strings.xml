@@ -9,7 +9,10 @@
     <string name="cross">Křížky</string>
     <string name="circle">Kolečka</string>
 
-    <string name="room_id">Room ID</string>
+    <string name="offline">Offline</string>
+    <string name="online">Online</string>
+
+    <string name="room_id">ID místnosti</string>
     <string name="join">Připojit</string>
     <string name="no_room">no room</string>
     <string name="coppied_to_clipboard">Zkopírováno do schránky!</string>

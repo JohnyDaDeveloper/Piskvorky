@@ -187,11 +187,16 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
         View shareRoomButton = root.findViewById(R.id.shareRoomButton);
         String roomId = getString(R.string.room_id);
 
-        if (documentReference == null) {
+        if (PiskvorkyService.getInstance().getGameMode().equals(GameModes.OFFLINE)) {
+            roomIdTextView.setVisibility(View.GONE);
+            shareRoomButton.setVisibility(View.GONE);
+        } else if (documentReference == null) {
             roomIdTextView.setText(roomId + ": " + getString(R.string.no_room));
             roomIdTextView.setOnClickListener(null);
+            roomIdTextView.setVisibility(View.VISIBLE);
             shareRoomButton.setVisibility(View.GONE);
         } else {
+            roomIdTextView.setVisibility(View.VISIBLE);
             roomIdTextView.setText(roomId + ": " + documentReference.getId());
             roomIdTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
