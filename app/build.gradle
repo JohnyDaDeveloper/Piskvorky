@@ -9,7 +9,7 @@ android {
         applicationId "cz.johnyapps.piskvorky"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 2
+        versionCode 3
         versionName "1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
