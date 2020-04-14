@@ -160,7 +160,10 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
         calculateFields();
 
         PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
-        piskvorkyService.setPlayingPlayer(NewGameStartsShape.get());
+
+        if (piskvorkyService.getGameMode().equals(GameModes.ONLINE)) {
+            piskvorkyService.setPlayingPlayer(NewGameStartsShape.get());
+        }
 
         setOnTouchListener(this);
 
