@@ -47,6 +47,8 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
     }
 
     private void initialize() {
+        setKeepScreenOn(true);
+
         PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
         piskvorkyService.setOnNewGameListener(new PiskvorkyService.OnNewGameListener() {
             @Override
