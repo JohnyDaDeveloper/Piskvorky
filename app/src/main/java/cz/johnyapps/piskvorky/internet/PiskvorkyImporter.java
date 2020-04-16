@@ -15,7 +15,9 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import cz.johnyapps.piskvorky.entities.Field;
+import cz.johnyapps.piskvorky.entities.Player;
 import cz.johnyapps.piskvorky.services.PiskvorkyService;
+import cz.johnyapps.piskvorky.services.PlayersService;
 import cz.johnyapps.piskvorky.shapes.Shapes;
 import cz.johnyapps.piskvorky.shapes.shape.Shape;
 
@@ -53,15 +55,23 @@ public class PiskvorkyImporter {
         piskvorkyService.setGameReference(gameReference);
     }
 
+    @SuppressWarnings("unchecked")
     public void processGameSnapshot(@Nullable DocumentSnapshot documentSnapshot) {
         if (documentSnapshot != null && documentSnapshot.exists()) {
-            @SuppressWarnings("unchecked")
             Map<String, Object> fields = (Map<String, Object>) documentSnapshot.get("fields");
 
             if (fields != null) {
                 mapToFields(fields);
             } else {
-                Log.e(TAG, "processDocumentSnapshot: fields were null");
+                Log.e(TAG, "processGameSnapshot: fields were null");
+            }
+
+            Map<String, Object> players = (Map<String, Object>) documentSnapshot.get("players");
+
+            if (players != null) {
+                mapToPlayers(players);
+            } else {
+                Log.e(TAG, "processGameSnapshot: players are null");
             }
 
             int playingPlayer = Integer.parseInt(String.valueOf(documentSnapshot.get("playingPlayer")));
@@ -73,7 +83,56 @@ public class PiskvorkyImporter {
             piskvorkyService.setNewGame(newGame);
             piskvorkyService.setPlayingPlayer(Shape.idToShape(playingPlayer));
         } else {
-            Log.w(TAG, "processDocumentSnapshot: document not found");
+            Log.w(TAG, "processGameSnapshot: document not found");
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void mapToPlayers(Map<String, Object> map) {
+        ArrayList<Player> players = new ArrayList<>();
+
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            players.add(Player.fromMap(entry.getKey(), (Map<String, Object>) entry.getValue()));
+        }
+
+
+        String myUid = PlayersService.getInstance().getMyUid();
+
+        if (myUid != null) {
+            boolean foundMyPlayer = false;
+            boolean foundEnemyPlayer = false;
+
+            for (Player player : players) {
+                if (player.getUid().equals(myUid)) {
+                    PlayersService.getInstance().setMyPlayer(player);
+                    foundMyPlayer = true;
+                } else {
+                    if (!foundEnemyPlayer) {
+                        PlayersService.getInstance().setEnemyPlayer(player);
+                        foundEnemyPlayer = true;
+                    } else {
+                        Log.w(TAG, "mapToPlayers: too many enemy players!");
+                    }
+                }
+            }
+
+            if (!foundMyPlayer) {
+                Log.e(TAG, "mapToPlayers: my player (" + myUid + ") not found!");
+            }
+        } else if (players.size() == 2) {
+            Log.e(TAG, "mapToPlayers: my uid is null! Player roles will be decided by host status.");
+
+            if (PiskvorkyService.getInstance().amIHost()) {
+                PlayersService.getInstance().setMyPlayer(players.get(0));
+                PlayersService.getInstance().setEnemyPlayer(players.get(1));
+            } else {
+                PlayersService.getInstance().setMyPlayer(players.get(1));
+                PlayersService.getInstance().setEnemyPlayer(players.get(0));
+            }
+        } else {
+            Log.e(TAG, "mapToPlayers: my uid is null and player count is incorrect (have " + players.size() + ", expected 2)! Creating default players...");
+            PlayersService.getInstance().setMyPlayer(new Player(null, Shapes.CROSS));
+            PlayersService.getInstance().setEnemyPlayer(new Player(null, Shapes.CIRCLE));
         }
     }
 

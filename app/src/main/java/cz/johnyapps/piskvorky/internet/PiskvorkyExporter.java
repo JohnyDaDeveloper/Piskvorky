@@ -11,7 +11,9 @@ import java.util.Map;
 
 import cz.johnyapps.piskvorky.entities.BoardSettings;
 import cz.johnyapps.piskvorky.entities.Field;
+import cz.johnyapps.piskvorky.entities.Player;
 import cz.johnyapps.piskvorky.services.PiskvorkyService;
+import cz.johnyapps.piskvorky.services.PlayersService;
 import cz.johnyapps.piskvorky.shapes.shape.base.NoShape;
 
 public class PiskvorkyExporter {
@@ -34,12 +36,18 @@ public class PiskvorkyExporter {
         CollectionReference games = piskvorkyService.getGamesCollection();
         DocumentReference gameReference = games.document();
 
+        Player myPlayer = PlayersService.getInstance().getMyPlayer();
+
+        Map<String, Object> playersMap = new HashMap<>();
+        playersMap.put(myPlayer.getUid(), PlayersService.getInstance().getMyPlayer().toMap());
+
         Map<String, Object> map = new HashMap<>();
         map.put("playingPlayer", piskvorkyService.getPlayingPlayerId());
         map.put("settings", boardSettings.toMap());
         map.put("fields", fieldsToMap());
         map.put("newGame", true);
         map.put("lastMove", -1);
+        map.put("players", playersMap);
 
         gameReference.set(map);
         return gameReference;
@@ -59,11 +67,22 @@ public class PiskvorkyExporter {
 
         Log.v(TAG, "updateGame: " + fields.size() + " fields, playing player: " + playingPlayerId);
 
+        Player myPlayer = PlayersService.getInstance().getMyPlayer();
+        Player enemyPlayer = PlayersService.getInstance().getEnemyPlayer();
+
+        Map<String, Object> playersMap = new HashMap<>();
+        playersMap.put(myPlayer.getUid(), PlayersService.getInstance().getMyPlayer().toMap());
+
+        if (enemyPlayer != null) {
+            playersMap.put(enemyPlayer.getUid(), enemyPlayer.toMap());
+        }
+
         Map<String, Object> map = new HashMap<>();
         map.put("fields", fields);
         map.put("playingPlayer", playingPlayerId);
         map.put("newGame", newGame);
         map.put("lastMove", lastMoveIndex);
+        map.put("players", playersMap);
         gameReference.update(map);
     }
 
