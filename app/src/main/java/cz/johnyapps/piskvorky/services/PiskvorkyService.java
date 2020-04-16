@@ -21,12 +21,9 @@ import java.util.ArrayList;
 import cz.johnyapps.piskvorky.entities.BoardSettings;
 import cz.johnyapps.piskvorky.entities.Field;
 import cz.johnyapps.piskvorky.GameModes;
-import cz.johnyapps.piskvorky.entities.Player;
 import cz.johnyapps.piskvorky.internet.PiskvorkyExporter;
 import cz.johnyapps.piskvorky.internet.PiskvorkyImporter;
 import cz.johnyapps.piskvorky.shapes.Shapes;
-import cz.johnyapps.piskvorky.shapes.shape.Shape;
-import cz.johnyapps.piskvorky.shapes.shape.base.NoShape;
 
 public class PiskvorkyService implements Shapes, GameModes {
     private static final String TAG = "PiskvorkyService";
@@ -138,10 +135,6 @@ public class PiskvorkyService implements Shapes, GameModes {
     public void createOnlineGame() {
         gameMode = ONLINE;
         amIHost = true;
-
-        Player enemyPlater = new Player("fake", Shapes.CIRCLE);
-        enemyPlater.setPlayingAsShape(enemyPlater.getPreferredShape());
-        PlayersService.getInstance().setEnemyPlayer(enemyPlater);
 
         DocumentReference documentReference = piskvorkyExporter.createGame(boardSettings);
         gameReference.setValue(documentReference);

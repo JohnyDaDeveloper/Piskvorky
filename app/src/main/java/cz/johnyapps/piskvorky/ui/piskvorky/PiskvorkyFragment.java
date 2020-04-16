@@ -26,6 +26,7 @@ import com.google.firebase.firestore.DocumentReference;
 
 import java.util.ArrayList;
 
+import cz.johnyapps.piskvorky.ChooseShapeDialog;
 import cz.johnyapps.piskvorky.R;
 import cz.johnyapps.piskvorky.SharedPreferencesNames;
 import cz.johnyapps.piskvorky.entities.Field;
@@ -35,9 +36,9 @@ import cz.johnyapps.piskvorky.services.PiskvorkyService;
 import cz.johnyapps.piskvorky.services.PlayersService;
 import cz.johnyapps.piskvorky.shapes.Shapes;
 import cz.johnyapps.piskvorky.shapes.shape.Shape;
-import cz.johnyapps.piskvorky.shapes.shape.base.Circle;
-import cz.johnyapps.piskvorky.shapes.shape.base.Cross;
-import cz.johnyapps.piskvorky.shapes.shape.custom.Hearth;
+import cz.johnyapps.piskvorky.shapes.shape.shapes.Circle;
+import cz.johnyapps.piskvorky.shapes.shape.shapes.Cross;
+import cz.johnyapps.piskvorky.shapes.shape.shapes.Hearth;
 import cz.johnyapps.piskvorky.views.PiskvorkyView;
 
 @SuppressLint("SetTextI18n")
@@ -105,19 +106,23 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
 
         PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
         TextView playingAsTextView = root.findViewById(R.id.playingAsTextView);
+        playingAsTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ChooseShapeDialog chooseShapeDialog = new ChooseShapeDialog(getContext());
+                chooseShapeDialog.show();
+            }
+        });
 
         if (piskvorkyService.getGameMode().equals(OFFLINE)) {
             playingAsTextView.setVisibility(View.GONE);
         } else {
             playingAsTextView.setVisibility(View.VISIBLE);
             Shape playingAs = PlayersService.getInstance().getMyPlayer().getPlayingAsShape();
+            int drawable = playingAs.getDrawable();
 
-            if (playingAs == Shapes.CROSS) {
-                playingAsTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cross, 0);
-            } else  if (playingAs == Shapes.HEARTH) {
-                playingAsTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.hearth, 0);
-            } else {
-                playingAsTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.circle, 0);
+            if (drawable != -1) {
+                playingAsTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0);
             }
         }
     }

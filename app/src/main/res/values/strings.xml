@@ -15,6 +15,9 @@
     <string name="offline">Offline</string>
     <string name="online">Online</string>
 
+    <string name="ok">OK</string>
+    <string name="cancel">Zrušit</string>
+
     <string name="room_id">ID místnosti</string>
     <string name="join">Připojit</string>
     <string name="no_room">no room</string>

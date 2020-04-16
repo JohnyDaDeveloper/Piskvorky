@@ -1,13 +1,15 @@
-package cz.johnyapps.piskvorky.shapes.shape.base;
+package cz.johnyapps.piskvorky.shapes.shape.shapes;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import cz.johnyapps.piskvorky.R;
 import cz.johnyapps.piskvorky.entities.Field;
+import cz.johnyapps.piskvorky.shapes.shape.Shape;
 
-public class Circle extends BaseShape {
+public class Circle extends Shape {
     public static final int ID = 2;
 
     @Override
@@ -33,5 +35,10 @@ public class Circle extends BaseShape {
     @Override
     public int getId() {
         return ID;
+    }
+
+    @Override
+    public int getDrawable() {
+        return R.drawable.circle;
     }
 }

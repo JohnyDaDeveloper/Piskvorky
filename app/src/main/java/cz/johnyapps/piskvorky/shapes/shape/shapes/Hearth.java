@@ -1,4 +1,4 @@
-package cz.johnyapps.piskvorky.shapes.shape.custom;
+package cz.johnyapps.piskvorky.shapes.shape.shapes;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,8 +9,9 @@ import android.graphics.Paint;
 
 import cz.johnyapps.piskvorky.R;
 import cz.johnyapps.piskvorky.entities.Field;
+import cz.johnyapps.piskvorky.shapes.shape.Shape;
 
-public class Hearth extends CustomShape {
+public class Hearth extends Shape {
     public static final int ID = 3;
 
     public Hearth() {
@@ -36,5 +37,10 @@ public class Hearth extends CustomShape {
     @Override
     public int getId() {
         return ID;
+    }
+
+    @Override
+    public int getDrawable() {
+        return R.drawable.hearth;
     }
 }
