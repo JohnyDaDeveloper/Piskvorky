@@ -1,5 +1,6 @@
 package cz.johnyapps.piskvorky.shapes.shape.base;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,7 +11,7 @@ public class Cross extends BaseShape {
     public static final int ID = 1;
 
     @Override
-    public void draw(Canvas canvas, Field field, float shapeWidth, float shapePadding) {
+    public void draw(Context context, Canvas canvas, Field field, float shapeWidth, float shapePadding) {
         float start = field.getWidthEnd();
         float top = field.getHeightEnd();
         float bottom = field.getHeightStart();

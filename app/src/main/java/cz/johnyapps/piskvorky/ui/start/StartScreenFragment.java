@@ -129,7 +129,6 @@ public class StartScreenFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
-                piskvorkyService.setMyPlayer(Shapes.CROSS);
                 piskvorkyService.createOnlineGame();
 
                 showGame();
@@ -159,7 +158,6 @@ public class StartScreenFragment extends Fragment {
                 }
 
                 PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
-                piskvorkyService.setMyPlayer(Shapes.CIRCLE);
                 piskvorkyService.setGameMode(GameModes.ONLINE);
 
                 PiskvorkyImporter importer = new PiskvorkyImporter();

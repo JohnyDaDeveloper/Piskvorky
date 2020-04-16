@@ -14,8 +14,10 @@ import java.util.ArrayList;
 import cz.johnyapps.piskvorky.GameModes;
 import cz.johnyapps.piskvorky.entities.BoardSettings;
 import cz.johnyapps.piskvorky.entities.Field;
+import cz.johnyapps.piskvorky.entities.Player;
 import cz.johnyapps.piskvorky.services.PiskvorkyService;
-import cz.johnyapps.piskvorky.shapes.NewGameStartsShape;
+import cz.johnyapps.piskvorky.services.PlayersService;
+import cz.johnyapps.piskvorky.shapes.NewGameStartsPlayer;
 import cz.johnyapps.piskvorky.shapes.ShapeDrawer;
 import cz.johnyapps.piskvorky.shapes.Shapes;
 import cz.johnyapps.piskvorky.shapes.shape.Shape;
@@ -64,7 +66,7 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
         });
 
         boardSettings = piskvorkyService.getBoardSettings();
-        shapeDrawer = new ShapeDrawer(boardSettings.getShapeWidth(), boardSettings.getShapePadding());
+        shapeDrawer = new ShapeDrawer(getContext(), boardSettings.getShapeWidth(), boardSettings.getShapePadding());
         lastMovePaint = new Paint();
         lastMovePaint.setColor(Color.YELLOW);
 
@@ -145,9 +147,13 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
 
     private void clickField(int index) {
         PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
+        PlayersService playersService = PlayersService.getInstance();
+
+        Player playingPlayer = playersService.getPlayingPlayer().getValue();
+        Shape playingShape = playingPlayer == null ? Shapes.NO_SHAPE : playingPlayer.getPlayingAsShape();
 
         if (piskvorkyService.getGameMode().equals(ONLINE)) {
-            if (piskvorkyService.getMyPlayer() != piskvorkyService.getPlayingPlayerShape()) {
+            if (playersService.getMyPlayer().getPlayingAsShape() != playingShape) {
                 Log.v(TAG, "clickField: not my move");
                 return;
             }
@@ -161,7 +167,7 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
             return;
         }
 
-        field.setShape(piskvorkyService.getPlayingPlayerShape());
+        field.setShape(playingShape);
         piskvorkyService.setFields(fields);
         piskvorkyService.setLastMoveIndex(index);
         switchPlayer();
@@ -176,7 +182,7 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
         PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
 
         if (piskvorkyService.getGameMode().equals(GameModes.ONLINE)) {
-            piskvorkyService.setPlayingPlayer(NewGameStartsShape.get());
+            PlayersService.getInstance().setPlayingPlayer(NewGameStartsPlayer.get());
         }
 
         setOnTouchListener(this);
@@ -279,12 +285,17 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
     }
 
     private void switchPlayer() {
-        PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
+        PlayersService playersService = PlayersService.getInstance();
 
-        if (piskvorkyService.getPlayingPlayerShape() == CROSS) {
-            piskvorkyService.setPlayingPlayer(CIRCLE);
+        Player playingPlayer = playersService.getPlayingPlayer().getValue();
+        Shape playingShape = playingPlayer == null ? Shapes.NO_SHAPE : playingPlayer.getPlayingAsShape();
+
+        if (playingShape == playersService.getMyPlayer().getPlayingAsShape()) {
+            Log.i(TAG, "switchPlayer: enemy");
+            playersService.setPlayingPlayer(playersService.getEnemyPlayer());
         } else {
-            piskvorkyService.setPlayingPlayer(CROSS);
+            Log.i(TAG, "switchPlayer: me");
+            playersService.setPlayingPlayer(playersService.getMyPlayer());
         }
     }
 

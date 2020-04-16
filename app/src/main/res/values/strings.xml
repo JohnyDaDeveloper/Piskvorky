@@ -3,11 +3,14 @@
 
     <string name="cross_won">Křížky vyhráli!</string>
     <string name="circle_won">Kolečka vyhráli!</string>
+    <string name="heart_won">Srdíčka vyhlráli!</string>
+    <string name="unknown_won">Někdo vyhrál! Ale nevíme kdo :/</string>
 
     <string name="chyba">Chyba!</string>
 
     <string name="cross">Křížky</string>
     <string name="circle">Kolečka</string>
+    <string name="hearth">Srdíčka</string>
 
     <string name="offline">Offline</string>
     <string name="online">Online</string>

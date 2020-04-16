@@ -14,6 +14,7 @@ import cz.johnyapps.piskvorky.entities.Field;
 import cz.johnyapps.piskvorky.entities.Player;
 import cz.johnyapps.piskvorky.services.PiskvorkyService;
 import cz.johnyapps.piskvorky.services.PlayersService;
+import cz.johnyapps.piskvorky.shapes.Shapes;
 import cz.johnyapps.piskvorky.shapes.shape.base.NoShape;
 
 public class PiskvorkyExporter {
@@ -42,7 +43,7 @@ public class PiskvorkyExporter {
         playersMap.put(myPlayer.getUid(), PlayersService.getInstance().getMyPlayer().toMap());
 
         Map<String, Object> map = new HashMap<>();
-        map.put("playingPlayer", piskvorkyService.getPlayingPlayerId());
+        map.put("playingPlayer", myPlayer.getPlayingAsShape().getId());
         map.put("settings", boardSettings.toMap());
         map.put("fields", fieldsToMap());
         map.put("newGame", true);
@@ -62,7 +63,8 @@ public class PiskvorkyExporter {
         PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
         Map<String, Object> fields = fieldsToMap();
 
-        int playingPlayerId = piskvorkyService.getPlayingPlayerId();
+        Player playingPlayer = PlayersService.getInstance().getPlayingPlayer().getValue();
+        int playingPlayerId = playingPlayer == null ? Shapes.NO_SHAPE.getId() : playingPlayer.getPlayingAsShape().getId();
         int lastMoveIndex = piskvorkyService.getLastMoveIndex();
 
         Log.v(TAG, "updateGame: " + fields.size() + " fields, playing player: " + playingPlayerId);

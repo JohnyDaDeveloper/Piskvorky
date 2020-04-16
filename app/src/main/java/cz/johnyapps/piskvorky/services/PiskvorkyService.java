@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import cz.johnyapps.piskvorky.entities.BoardSettings;
 import cz.johnyapps.piskvorky.entities.Field;
 import cz.johnyapps.piskvorky.GameModes;
+import cz.johnyapps.piskvorky.entities.Player;
 import cz.johnyapps.piskvorky.internet.PiskvorkyExporter;
 import cz.johnyapps.piskvorky.internet.PiskvorkyImporter;
 import cz.johnyapps.piskvorky.shapes.Shapes;
@@ -37,10 +38,7 @@ public class PiskvorkyService implements Shapes, GameModes {
 
     private MutableLiveData<DocumentReference> gameReference;
     private MutableLiveData<ArrayList<Field>> fields;
-    private MutableLiveData<Shape> playingPlayer;
-    private MutableLiveData<Shape> lastGameWonShape;
 
-    private Shape myPlayer;
     private String gameMode;
     private boolean amIHost;
     private int lastMoveIndex;
@@ -57,9 +55,6 @@ public class PiskvorkyService implements Shapes, GameModes {
 
         gameReference = new MutableLiveData<>();
         fields = new MutableLiveData<>();
-        playingPlayer = new MutableLiveData<>();
-        lastGameWonShape = new MutableLiveData<>();
-        playingPlayer.setValue(CROSS);
         amIHost = false;
         lastMoveIndex = -1;
         highlightLastMove = true;
@@ -130,14 +125,6 @@ public class PiskvorkyService implements Shapes, GameModes {
         this.onNewGameListener = onNewGameListener;
     }
 
-    public Shape getMyPlayer() {
-        return myPlayer;
-    }
-
-    public void setMyPlayer(Shape myPlayer) {
-        this.myPlayer = myPlayer;
-    }
-
     public CollectionReference getGamesCollection() {
         FirebaseFirestore database = FirebaseFirestore.getInstance();
         return database.collection("games");
@@ -151,6 +138,10 @@ public class PiskvorkyService implements Shapes, GameModes {
     public void createOnlineGame() {
         gameMode = ONLINE;
         amIHost = true;
+
+        Player enemyPlater = new Player("fake", Shapes.CIRCLE);
+        enemyPlater.setPlayingAsShape(enemyPlater.getPreferredShape());
+        PlayersService.getInstance().setEnemyPlayer(enemyPlater);
 
         DocumentReference documentReference = piskvorkyExporter.createGame(boardSettings);
         gameReference.setValue(documentReference);
@@ -186,43 +177,6 @@ public class PiskvorkyService implements Shapes, GameModes {
         }
 
         return fields.get(i);
-    }
-
-    public LiveData<Shape> getPlayingPlayer() {
-        return playingPlayer;
-    }
-
-    public void setPlayingPlayer(Shape playingPlayer) {
-        this.playingPlayer.setValue(playingPlayer);
-    }
-
-    public int getPlayingPlayerId() {
-        Shape shape = playingPlayer.getValue();
-
-        if (shape != null) {
-            return shape.getId();
-        }
-
-        return NoShape.ID;
-    }
-
-    public void setLastGameWonShape(Shape lastGameWonShape) {
-        this.lastGameWonShape.setValue(lastGameWonShape);
-    }
-
-    public int getLastGameWonShape() {
-        Shape shape = lastGameWonShape.getValue();
-
-        if (shape != null) {
-            return shape.getId();
-        }
-
-        return NoShape.ID;
-    }
-
-    public Shape getPlayingPlayerShape() {
-        Shape shape = playingPlayer.getValue();
-        return shape == null ? NO_SHAPE : shape;
     }
 
     public void setFirestoreGameChangedListener() {

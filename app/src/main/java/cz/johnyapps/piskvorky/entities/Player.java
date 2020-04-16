@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import cz.johnyapps.piskvorky.shapes.Shapes;
 import cz.johnyapps.piskvorky.shapes.shape.Shape;
 
 public class Player {
@@ -13,10 +14,20 @@ public class Player {
 
     private String uid;
     private Shape preferredShape;
+    private Shape playingAsShape;
 
     public Player(String uid, Shape preferredShape) {
         this.uid = uid;
+        this.playingAsShape = preferredShape;
         this.preferredShape = preferredShape;
+    }
+
+    public Shape getPlayingAsShape() {
+        return playingAsShape == null ? Shapes.NO_SHAPE : playingAsShape;
+    }
+
+    public void setPlayingAsShape(Shape playingAsShape) {
+        this.playingAsShape = playingAsShape;
     }
 
     public String getUid() {

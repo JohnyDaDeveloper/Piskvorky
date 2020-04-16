@@ -81,7 +81,8 @@ public class PiskvorkyImporter {
             PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
             piskvorkyService.setLastMoveIndex(lastMoveIndex);
             piskvorkyService.setNewGame(newGame);
-            piskvorkyService.setPlayingPlayer(Shape.idToShape(playingPlayer));
+
+            PlayersService.getInstance().setPlayingPlayer(PlayersService.getInstance().getPlayerByShape(Shape.idToShape(playingPlayer)));
         } else {
             Log.w(TAG, "processGameSnapshot: document not found");
         }

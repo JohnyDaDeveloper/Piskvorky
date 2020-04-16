@@ -30,11 +30,14 @@ import cz.johnyapps.piskvorky.R;
 import cz.johnyapps.piskvorky.SharedPreferencesNames;
 import cz.johnyapps.piskvorky.entities.Field;
 import cz.johnyapps.piskvorky.GameModes;
+import cz.johnyapps.piskvorky.entities.Player;
 import cz.johnyapps.piskvorky.services.PiskvorkyService;
+import cz.johnyapps.piskvorky.services.PlayersService;
 import cz.johnyapps.piskvorky.shapes.Shapes;
 import cz.johnyapps.piskvorky.shapes.shape.Shape;
 import cz.johnyapps.piskvorky.shapes.shape.base.Circle;
 import cz.johnyapps.piskvorky.shapes.shape.base.Cross;
+import cz.johnyapps.piskvorky.shapes.shape.custom.Hearth;
 import cz.johnyapps.piskvorky.views.PiskvorkyView;
 
 @SuppressLint("SetTextI18n")
@@ -107,10 +110,12 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
             playingAsTextView.setVisibility(View.GONE);
         } else {
             playingAsTextView.setVisibility(View.VISIBLE);
-            Shape playingAs = PiskvorkyService.getInstance().getMyPlayer();
+            Shape playingAs = PlayersService.getInstance().getMyPlayer().getPlayingAsShape();
 
             if (playingAs == Shapes.CROSS) {
                 playingAsTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cross, 0);
+            } else  if (playingAs == Shapes.HEARTH) {
+                playingAsTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.hearth, 0);
             } else {
                 playingAsTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.circle, 0);
             }
@@ -129,7 +134,7 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
         piskvorkyView.setOnShapeWonListener(new PiskvorkyView.OnShapeWonListener() {
             @Override
             public void onShapeWon(Shape shape) {
-                shapeWon(shape);
+                playerWon(PlayersService.getInstance().getPlayerByShape(shape));
             }
         });
     }
@@ -143,12 +148,13 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
         }
 
         PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
+        PlayersService playersService = PlayersService.getInstance();
 
-        piskvorkyService.getPlayingPlayer().observe(this, new Observer<Shape>() {
+        playersService.getPlayingPlayer().observe(this, new Observer<Player>() {
             @Override
-            public void onChanged(Shape shape) {
-                if (shape != null) {
-                    showPlayingShape(shape);
+            public void onChanged(Player player) {
+                if (player != null) {
+                    showPlayingShape(player.getPlayingAsShape());
                 } else {
                     showPlayingShape(NO_SHAPE);
                 }
@@ -272,6 +278,11 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
                 break;
             }
 
+            case Hearth.ID: {
+                txtPlayingPlayer.setText(R.string.hearth);
+                break;
+            }
+
             default: {
                 txtPlayingPlayer.setText(R.string.chyba);
                 break;
@@ -279,8 +290,8 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
         }
     }
 
-    private void shapeWon(Shape shape) {
-        PiskvorkyService.getInstance().setLastGameWonShape(shape);
+    private void playerWon(Player player) {
+        PlayersService.getInstance().setLastGameWon(player);
 
         View root = getView();
 
@@ -291,6 +302,14 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
 
         TextView txtPlayingPlayer = root.findViewById(R.id.txtPlayingPlayer);
 
+        if (player == null) {
+            Log.e(TAG, "playerWon: unknown player");
+            Toast.makeText(getContext(), R.string.unknown_won, Toast.LENGTH_SHORT).show();
+            txtPlayingPlayer.setText(R.string.unknown_won);
+            return;
+        }
+
+        Shape shape = player.getPlayingAsShape();
         switch (shape.getId()) {
             case Cross.ID: {
                 Toast.makeText(getContext(), R.string.cross_won, Toast.LENGTH_SHORT).show();
@@ -304,9 +323,15 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
                 break;
             }
 
+            case Hearth.ID: {
+                Toast.makeText(getContext(), R.string.heart_won, Toast.LENGTH_SHORT).show();
+                txtPlayingPlayer.setText(R.string.heart_won);
+                break;
+            }
+
             default: {
-                Toast.makeText(getContext(), R.string.chyba, Toast.LENGTH_SHORT).show();
-                txtPlayingPlayer.setText(R.string.chyba);
+                Toast.makeText(getContext(), R.string.unknown_won, Toast.LENGTH_SHORT).show();
+                txtPlayingPlayer.setText(R.string.unknown_won);
                 break;
             }
         }
