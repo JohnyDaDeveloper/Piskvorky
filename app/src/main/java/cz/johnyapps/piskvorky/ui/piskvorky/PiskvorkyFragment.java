@@ -96,15 +96,6 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
     }
 
     private void setupPlayingAs() {
-        PlayersService.getInstance().setOnMyPlayerChangedListener(new PlayersService.OnMyPlayerChangedListener() {
-            @Override
-            public void onChange(Player myPlayer) {
-                showPlayingAs();
-            }
-        });
-    }
-
-    private void showPlayingAs() {
         View root = getView();
 
         if (root == null) {
@@ -119,12 +110,31 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
             playingAsTextView.setVisibility(View.GONE);
         } else {
             playingAsTextView.setVisibility(View.VISIBLE);
-            Shape playingAs = PlayersService.getInstance().getMyPlayer().getPlayingAsShape();
-            int drawable = playingAs.getDrawable();
+        }
 
-            if (drawable != -1) {
-                playingAsTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0);
+        PlayersService.getInstance().setOnMyPlayerChangedListener(new PlayersService.OnMyPlayerChangedListener() {
+            @Override
+            public void onChange(Player myPlayer) {
+                showPlayingAs();
             }
+        });
+    }
+
+    private void showPlayingAs() {
+        View root = getView();
+
+        if (root == null) {
+            Log.w(TAG, "showPlayingAs: root is null!");
+            return;
+        }
+
+        TextView playingAsTextView = root.findViewById(R.id.playingAsTextView);
+
+        Shape playingAs = PlayersService.getInstance().getMyPlayer().getPlayingAsShape();
+        int drawable = playingAs.getDrawable();
+
+        if (drawable != -1) {
+            playingAsTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0);
         }
     }
 

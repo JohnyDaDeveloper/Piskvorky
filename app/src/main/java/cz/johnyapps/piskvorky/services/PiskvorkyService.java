@@ -25,6 +25,8 @@ import cz.johnyapps.piskvorky.entities.Player;
 import cz.johnyapps.piskvorky.internet.PiskvorkyExporter;
 import cz.johnyapps.piskvorky.internet.PiskvorkyImporter;
 import cz.johnyapps.piskvorky.shapes.Shapes;
+import cz.johnyapps.piskvorky.shapes.shape.shapes.Circle;
+import cz.johnyapps.piskvorky.shapes.shape.shapes.Cross;
 
 public class PiskvorkyService implements Shapes, GameModes {
     private static final String TAG = "PiskvorkyService";
@@ -131,6 +133,16 @@ public class PiskvorkyService implements Shapes, GameModes {
     public void createOfflineGame() {
         setGameMode(OFFLINE);
         amIHost = true;
+
+        Player player1 = new Player("0", new Cross());
+        player1.setPlayingAsShape(player1.getPreferredShape());
+        Player player2 = new Player("1", new Circle());
+        player2.setPlayingAsShape(player2.getPreferredShape());
+
+        PlayersService.getInstance().setMyPlayer(player1);
+        PlayersService.getInstance().setEnemyPlayer(player2);
+
+        PlayersService.getInstance().setPlayingPlayer(player1);
     }
 
     public void createOnlineGame() {
