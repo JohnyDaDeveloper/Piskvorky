@@ -6,7 +6,9 @@
     <string name="heart_won">Srdíčka vyhlráli!</string>
     <string name="unknown_won">Někdo vyhrál! Ale nevíme kdo :/</string>
 
-    <string name="chyba">Chyba!</string>
+    <string name="dialog_choose_shape">Výběr tvaru</string>
+
+    <string name="error">Chyba!</string>
 
     <string name="cross">Křížky</string>
     <string name="circle">Kolečka</string>
@@ -17,13 +19,15 @@
 
     <string name="ok">OK</string>
     <string name="cancel">Zrušit</string>
+    <string name="change">Změnit</string>
+    <string name="join">Připojit</string>
 
     <string name="room_id">ID místnosti</string>
-    <string name="join">Připojit</string>
     <string name="no_room">no room</string>
     <string name="coppied_to_clipboard">Zkopírováno do schránky!</string>
     <string name="create_online">Založit místnost</string>
     <string name="playing_as">Hraješ za</string>
     <string name="play_offline">Hrát offline</string>
     <string name="highlight_last_move">Zvýrazňit poslední tah</string>
+    <string name="preferred_shape">Preferovaný tvar</string>
 </resources>

@@ -79,7 +79,21 @@ public class PlayersService {
 
     public void setMyPlayer(Player myPlayer) {
         Log.v(TAG, "setMyPlayer: " + myPlayer.getUid() + " " + myPlayer.getPlayingAsShape());
+
+        if (onMyPlayerChangedListener != null) {
+            onMyPlayerChangedListener.onChange(myPlayer);
+        }
+
         this.myPlayer = myPlayer;
+    }
+
+    private OnMyPlayerChangedListener onMyPlayerChangedListener;
+    public interface OnMyPlayerChangedListener {
+        void onChange(Player myPlayer);
+    }
+
+    public void setOnMyPlayerChangedListener(OnMyPlayerChangedListener onMyPlayerChangedListener) {
+        this.onMyPlayerChangedListener = onMyPlayerChangedListener;
     }
 
     public Player getEnemyPlayer() {

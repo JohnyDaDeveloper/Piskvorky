@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import cz.johnyapps.piskvorky.entities.BoardSettings;
 import cz.johnyapps.piskvorky.entities.Field;
 import cz.johnyapps.piskvorky.GameModes;
+import cz.johnyapps.piskvorky.entities.Player;
 import cz.johnyapps.piskvorky.internet.PiskvorkyExporter;
 import cz.johnyapps.piskvorky.internet.PiskvorkyImporter;
 import cz.johnyapps.piskvorky.shapes.Shapes;
@@ -128,16 +129,48 @@ public class PiskvorkyService implements Shapes, GameModes {
     }
 
     public void createOfflineGame() {
-        gameMode = OFFLINE;
+        setGameMode(OFFLINE);
         amIHost = true;
     }
 
     public void createOnlineGame() {
-        gameMode = ONLINE;
+        setGameMode(ONLINE);
         amIHost = true;
+
+        Player myPlayer = PlayersService.getInstance().getMyPlayer();
+        myPlayer.setPlayingAsShape(myPlayer.getPreferredShape());
+        PlayersService.getInstance().setMyPlayer(myPlayer);
 
         DocumentReference documentReference = piskvorkyExporter.createGame(boardSettings);
         gameReference.setValue(documentReference);
+    }
+
+    public void joinOnlineGame(String roomId) {
+        setGameMode(GameModes.ONLINE);
+        amIHost = false;
+
+        PiskvorkyImporter importer = new PiskvorkyImporter();
+        importer.setOnImportFinishedListener(new PiskvorkyImporter.OnImportFinishedListener() {
+            @Override
+            public void onSuccess() {
+                Log.i(TAG, "joinOnlineGame: onSuccess");
+
+                PiskvorkyExporter piskvorkyExporter = new PiskvorkyExporter();
+                piskvorkyExporter.updateGame(gameReference.getValue(), true);
+            }
+
+            @Override
+            public void onFail() {
+                Log.w(TAG, "joinOnlineGame: onFail");
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+
+        importer.importGame(roomId);
     }
 
     public void updateGame(boolean newGame) {

@@ -1,5 +1,7 @@
 package cz.johnyapps.piskvorky.ui.start;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,18 +19,32 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.firebase.auth.FirebaseUser;
 
+import org.json.JSONException;
+
 import cz.johnyapps.piskvorky.BuildConfig;
-import cz.johnyapps.piskvorky.GameModes;
+import cz.johnyapps.piskvorky.ChooseShapeDialog;
 import cz.johnyapps.piskvorky.R;
-import cz.johnyapps.piskvorky.internet.PiskvorkyImporter;
+import cz.johnyapps.piskvorky.SharedPreferencesNames;
+import cz.johnyapps.piskvorky.entities.Player;
 import cz.johnyapps.piskvorky.services.PiskvorkyService;
-import cz.johnyapps.piskvorky.shapes.Shapes;
+import cz.johnyapps.piskvorky.services.PlayersService;
+import cz.johnyapps.piskvorky.shapes.shape.Shape;
 import cz.johnyapps.piskvorky.ui.main.MainViewModel;
 
 public class StartScreenFragment extends Fragment {
     private static final String TAG = "StartScreenFragment";
 
     private MainViewModel viewModel;
+    private SharedPreferences prefs;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Context context = getContext();
+        assert context != null;
+        prefs = context.getSharedPreferences(SharedPreferencesNames.NAME, Context.MODE_PRIVATE);
+    }
 
     @Nullable
     @Override
@@ -44,6 +60,7 @@ public class StartScreenFragment extends Fragment {
         setupCreateButton();
         setupOfflineButton();
         setupVersion();
+        setupChangePreferredShapeButton();
     }
 
     private void setupViewModel() {
@@ -56,6 +73,63 @@ public class StartScreenFragment extends Fragment {
                 handleUser(firebaseUser);
             }
         });
+    }
+
+    private void setupChangePreferredShapeButton() {
+        View root = getView();
+
+        if (root == null) {
+            Log.w(TAG, "setupChangePreferredShapeButton: root is null");
+            return;
+        }
+
+        Player myPlayer = PlayersService.getInstance().getMyPlayer();
+        int drawable = myPlayer.getPreferredShape().getDrawable();
+
+        TextView shapeTextView = root.findViewById(R.id.preferredShapeTextView);
+        shapeTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0);
+
+        Button changeButton = root.findViewById(R.id.changePreferredShapeButton);
+        changeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick");
+
+                ChooseShapeDialog chooseShapeDialog = new ChooseShapeDialog(getContext());
+                chooseShapeDialog.setOnShapeSelectedListener(new ChooseShapeDialog.OnShapeSelectedListener() {
+                    @Override
+                    public void onShape(Shape shape) {
+                        changePreferredShape(shape);
+                    }
+                });
+
+                chooseShapeDialog.show();
+            }
+        });
+    }
+
+    private void changePreferredShape(Shape shape) {
+        View root = getView();
+
+        if (root == null) {
+            Log.w(TAG, "changePreferredShape: root is null");
+            return;
+        }
+
+        TextView shapeTextView = root.findViewById(R.id.preferredShapeTextView);
+
+        Player myPlayer = PlayersService.getInstance().getMyPlayer();
+        myPlayer.setPreferredShape(shape);
+        PlayersService.getInstance().setMyPlayer(myPlayer);
+
+        int drawable = myPlayer.getPreferredShape().getDrawable();
+        shapeTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0);
+
+        try {
+            prefs.edit().putString(SharedPreferencesNames.MY_PLAYER, myPlayer.toJSONString()).apply();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void handleUser(FirebaseUser firebaseUser) {
@@ -157,12 +231,7 @@ public class StartScreenFragment extends Fragment {
                     return;
                 }
 
-                PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
-                piskvorkyService.setGameMode(GameModes.ONLINE);
-
-                PiskvorkyImporter importer = new PiskvorkyImporter();
-                importer.importGame(roomId);
-
+                PiskvorkyService.getInstance().joinOnlineGame(roomId);
                 showGame();
             }
         });

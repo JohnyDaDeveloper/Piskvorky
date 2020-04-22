@@ -26,7 +26,6 @@ import com.google.firebase.firestore.DocumentReference;
 
 import java.util.ArrayList;
 
-import cz.johnyapps.piskvorky.ChooseShapeDialog;
 import cz.johnyapps.piskvorky.R;
 import cz.johnyapps.piskvorky.SharedPreferencesNames;
 import cz.johnyapps.piskvorky.entities.Field;
@@ -97,6 +96,15 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
     }
 
     private void setupPlayingAs() {
+        PlayersService.getInstance().setOnMyPlayerChangedListener(new PlayersService.OnMyPlayerChangedListener() {
+            @Override
+            public void onChange(Player myPlayer) {
+                showPlayingAs();
+            }
+        });
+    }
+
+    private void showPlayingAs() {
         View root = getView();
 
         if (root == null) {
@@ -106,13 +114,6 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
 
         PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
         TextView playingAsTextView = root.findViewById(R.id.playingAsTextView);
-        playingAsTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ChooseShapeDialog chooseShapeDialog = new ChooseShapeDialog(getContext());
-                chooseShapeDialog.show();
-            }
-        });
 
         if (piskvorkyService.getGameMode().equals(OFFLINE)) {
             playingAsTextView.setVisibility(View.GONE);
@@ -289,7 +290,7 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
             }
 
             default: {
-                txtPlayingPlayer.setText(R.string.chyba);
+                txtPlayingPlayer.setText(R.string.error);
                 break;
             }
         }

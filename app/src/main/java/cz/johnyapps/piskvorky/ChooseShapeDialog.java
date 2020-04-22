@@ -3,7 +3,6 @@ package cz.johnyapps.piskvorky;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -11,8 +10,6 @@ import cz.johnyapps.piskvorky.shapes.Shapes;
 import cz.johnyapps.piskvorky.shapes.shape.Shape;
 
 public class ChooseShapeDialog {
-    private static final String TAG = "ChooseShapeDialog";
-
     private Context context;
     private int index = 0;
     private Shape[] shapes = Shapes.ALL_SHAPES;
@@ -24,6 +21,7 @@ public class ChooseShapeDialog {
     public void show() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setView(R.layout.dialog_choose_shape)
+                .setTitle(R.string.dialog_choose_shape)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -75,6 +73,17 @@ public class ChooseShapeDialog {
     }
 
     private void selected() {
-        Log.d(TAG, "selected: " + shapes[index]);
+        if (onShapeSelectedListener != null) {
+            onShapeSelectedListener.onShape(shapes[index]);
+        }
+    }
+
+    private OnShapeSelectedListener onShapeSelectedListener;
+    public interface OnShapeSelectedListener {
+        void onShape(Shape shape);
+    }
+
+    public void setOnShapeSelectedListener(OnShapeSelectedListener onShapeSelectedListener) {
+        this.onShapeSelectedListener = onShapeSelectedListener;
     }
 }

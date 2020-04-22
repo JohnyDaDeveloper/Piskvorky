@@ -20,6 +20,8 @@ import cz.johnyapps.piskvorky.services.PiskvorkyService;
 import cz.johnyapps.piskvorky.services.PlayersService;
 import cz.johnyapps.piskvorky.shapes.Shapes;
 import cz.johnyapps.piskvorky.shapes.shape.Shape;
+import cz.johnyapps.piskvorky.shapes.shape.shapes.Circle;
+import cz.johnyapps.piskvorky.shapes.shape.shapes.Cross;
 
 public class PiskvorkyImporter {
     private static final String TAG = "PiskvorkyImporter";
@@ -82,58 +84,58 @@ public class PiskvorkyImporter {
             piskvorkyService.setLastMoveIndex(lastMoveIndex);
             piskvorkyService.setNewGame(newGame);
 
-            PlayersService.getInstance().setPlayingPlayer(PlayersService.getInstance().getPlayerByShape(Shape.idToShape(playingPlayer)));
+            Shape shape = Shape.idToShape(playingPlayer);
+            Player player = PlayersService.getInstance().getPlayerByShape(shape);
+            PlayersService.getInstance().setPlayingPlayer(player);
+
+            if (onImportFinishedListener != null) {
+                onImportFinishedListener.onSuccess();
+            }
         } else {
             Log.w(TAG, "processGameSnapshot: document not found");
+
+            if (onImportFinishedListener != null) {
+                onImportFinishedListener.onFail();
+            }
+        }
+
+        if (onImportFinishedListener != null) {
+            onImportFinishedListener.onComplete();
         }
     }
 
     @SuppressWarnings("unchecked")
     private void mapToPlayers(Map<String, Object> map) {
-        ArrayList<Player> players = new ArrayList<>();
+        String myUid = PlayersService.getInstance().getMyUid();
+        boolean foundMyPlayer = false;
 
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            players.add(Player.fromMap(entry.getKey(), (Map<String, Object>) entry.getValue()));
+            Player player = Player.fromMap(entry.getKey(), (Map<String, Object>) entry.getValue());
+
+            if (player.getUid().equals(myUid)) {
+                foundMyPlayer = true;
+                PlayersService.getInstance().setMyPlayer(player);
+            } else {
+                PlayersService.getInstance().setEnemyPlayer(player);
+            }
         }
 
+        if (!foundMyPlayer) {
+            Player myPlayer = PlayersService.getInstance().getMyPlayer();
+            Shape preferred = myPlayer.getPreferredShape();
 
-        String myUid = PlayersService.getInstance().getMyUid();
+            Player enemyPlayer = PlayersService.getInstance().getEnemyPlayer();
+            Shape enemyShape = enemyPlayer.getPlayingAsShape();
 
-        if (myUid != null) {
-            boolean foundMyPlayer = false;
-            boolean foundEnemyPlayer = false;
-
-            for (Player player : players) {
-                if (player.getUid().equals(myUid)) {
-                    PlayersService.getInstance().setMyPlayer(player);
-                    foundMyPlayer = true;
+            if (preferred.getId() == enemyShape.getId()) {
+                if (preferred.getId() == Cross.ID) {
+                    myPlayer.setPlayingAsShape(new Circle());
                 } else {
-                    if (!foundEnemyPlayer) {
-                        PlayersService.getInstance().setEnemyPlayer(player);
-                        foundEnemyPlayer = true;
-                    } else {
-                        Log.w(TAG, "mapToPlayers: too many enemy players!");
-                    }
+                    myPlayer.setPlayingAsShape(new Cross());
                 }
-            }
-
-            if (!foundMyPlayer) {
-                Log.e(TAG, "mapToPlayers: my player (" + myUid + ") not found!");
-            }
-        } else if (players.size() == 2) {
-            Log.e(TAG, "mapToPlayers: my uid is null! Player roles will be decided by host status.");
-
-            if (PiskvorkyService.getInstance().amIHost()) {
-                PlayersService.getInstance().setMyPlayer(players.get(0));
-                PlayersService.getInstance().setEnemyPlayer(players.get(1));
             } else {
-                PlayersService.getInstance().setMyPlayer(players.get(1));
-                PlayersService.getInstance().setEnemyPlayer(players.get(0));
+                myPlayer.setPlayingAsShape(preferred);
             }
-        } else {
-            Log.e(TAG, "mapToPlayers: my uid is null and player count is incorrect (have " + players.size() + ", expected 2)! Creating default players...");
-            PlayersService.getInstance().setMyPlayer(new Player(null, Shapes.CROSS));
-            PlayersService.getInstance().setEnemyPlayer(new Player(null, Shapes.CIRCLE));
         }
     }
 
@@ -163,5 +165,16 @@ public class PiskvorkyImporter {
         }
 
         piskvorkyService.setFields(fields);
+    }
+
+    private OnImportFinishedListener onImportFinishedListener;
+    public interface OnImportFinishedListener {
+        void onSuccess();
+        void onFail();
+        void onComplete();
+    }
+
+    public void setOnImportFinishedListener(OnImportFinishedListener onImportFinishedListener) {
+        this.onImportFinishedListener = onImportFinishedListener;
     }
 }
