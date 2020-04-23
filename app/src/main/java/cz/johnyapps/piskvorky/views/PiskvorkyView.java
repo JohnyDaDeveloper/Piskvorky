@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -12,6 +13,7 @@ import android.view.View;
 import java.util.ArrayList;
 
 import cz.johnyapps.piskvorky.GameModes;
+import cz.johnyapps.piskvorky.R;
 import cz.johnyapps.piskvorky.entities.BoardSettings;
 import cz.johnyapps.piskvorky.entities.Field;
 import cz.johnyapps.piskvorky.entities.Player;
@@ -33,6 +35,9 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
     private ShapeDrawer shapeDrawer;
     private Paint lastMovePaint;
 
+    private String messageToDraw;
+    private boolean waitingForOpponent;
+
     public PiskvorkyView(Context context) {
         super(context);
         initialize();
@@ -50,6 +55,8 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
 
     private void initialize() {
         setKeepScreenOn(true);
+
+        waitingForOpponent = false;
 
         PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
         piskvorkyService.setOnNewGameListener(new PiskvorkyService.OnNewGameListener() {
@@ -102,6 +109,8 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
         super.draw(canvas);
         canvas.drawColor(Color.WHITE);
 
+        drawCenteredMessage(canvas);
+
         PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
 
         if (piskvorkyService.getFieldsArray() == null) {
@@ -120,6 +129,37 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
                 onShapeWonListener.onShapeWon(shape);
             }
         }
+    }
+
+    private void drawCenteredMessage(Canvas canvas) {
+        if (messageToDraw != null) {
+            Paint paint = new Paint();
+            paint.setColor(Color.RED);
+            paint.setTextSize(50);
+            paint.setFakeBoldText(true);
+
+            Rect r = new Rect();
+            canvas.getClipBounds(r);
+            int cHeight = r.height();
+            int cWidth = r.width();
+            paint.setTextAlign(Paint.Align.LEFT);
+            paint.getTextBounds(messageToDraw, 0, messageToDraw.length(), r);
+            float x = cWidth / 2f - r.width() / 2f - r.left;
+            float y = cHeight / 2f + r.height() / 2f - r.bottom;
+            canvas.drawText(messageToDraw, x, y, paint);
+        }
+    }
+
+    public void waitForOpponent() {
+        messageToDraw = getContext().getString(R.string.waiting_for_opponent);
+        waitingForOpponent = true;
+        invalidate();
+    }
+
+    public void opponentJoined() {
+        messageToDraw = null;
+        waitingForOpponent = false;
+        invalidate();
     }
 
     private void fillLastMoveField(Canvas canvas) {
@@ -146,6 +186,11 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
     }
 
     private void clickField(int index) {
+        if (waitingForOpponent) {
+            Log.v(TAG, "clickField: waiting for opponent");
+            return;
+        }
+
         PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
         PlayersService playersService = PlayersService.getInstance();
 
@@ -261,14 +306,24 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
         width += strokeWidth;
         height += strokeWidth;
 
-        for (int i = 0; i < widthCount; i++) {
-            float linePlace = fieldDimen * i + padding;
+        if (waitingForOpponent) {
+            float linePlace = fieldDimen * (widthCount - 1) + padding;
+            canvas.drawLine(padding, 0, padding, height, paint);
             canvas.drawLine(linePlace, 0, linePlace, height, paint);
-        }
 
-        for (int i = 0; i < heightCount; i++) {
-            float linePlace = fieldDimen * i + padding;
+            linePlace = fieldDimen * (heightCount - 1) + padding;
+            canvas.drawLine(0, padding, width, padding, paint);
             canvas.drawLine(0, linePlace, width, linePlace, paint);
+        } else {
+            for (int i = 0; i < widthCount; i++) {
+                float linePlace = fieldDimen * i + padding;
+                canvas.drawLine(linePlace, 0, linePlace, height, paint);
+            }
+
+            for (int i = 0; i < heightCount; i++) {
+                float linePlace = fieldDimen * i + padding;
+                canvas.drawLine(0, linePlace, width, linePlace, paint);
+            }
         }
     }
 

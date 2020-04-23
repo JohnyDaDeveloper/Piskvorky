@@ -8,6 +8,9 @@
 
     <string name="dialog_choose_shape">Výběr tvaru</string>
 
+    <string name="loading">Načítání…</string>
+    <string name="waiting_for_opponent">Čekáme na oponenta…</string>
+
     <string name="error">Chyba!</string>
 
     <string name="cross">Křížky</string>

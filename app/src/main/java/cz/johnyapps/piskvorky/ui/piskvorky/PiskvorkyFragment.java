@@ -70,6 +70,10 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
         setupGame();
         setupPlayingAs();
 
+        if (PiskvorkyService.getInstance().getGameMode().equals(GameModes.ONLINE)) {
+            waitForEnemy();
+        }
+
         PiskvorkyService.getInstance().setFirestoreGameChangedListener();
     }
 
@@ -80,6 +84,31 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
         PiskvorkyService piskvorkyService = PiskvorkyService.getInstance();
         if (piskvorkyService.amIHost()) {
             piskvorkyService.destroyGame();
+        }
+    }
+
+    private void waitForEnemy() {
+        View root = getView();
+
+        if (root == null) {
+            Log.w(TAG, "waitForEnemy: root is null!");
+            return;
+        }
+
+        Player enemyPlayer = PlayersService.getInstance().getEnemyPlayer();
+
+        if (enemyPlayer == null) {
+            final PiskvorkyView piskvorkyView = root.findViewById(R.id.board);
+            piskvorkyView.waitForOpponent();
+
+            PlayersService.getInstance().setOnEnemyPlayerChangedListener(new PlayersService.OnEnemyPlayerChangedListener() {
+                @Override
+                public void onChange(Player enemyPlayer) {
+                    if (enemyPlayer != null) {
+                        piskvorkyView.opponentJoined();
+                    }
+                }
+            });
         }
     }
 

@@ -79,12 +79,11 @@ public class PlayersService {
 
     public void setMyPlayer(Player myPlayer) {
         Log.v(TAG, "setMyPlayer: " + myPlayer.getUid() + " " + myPlayer.getPlayingAsShape());
+        this.myPlayer = myPlayer;
 
         if (onMyPlayerChangedListener != null) {
             onMyPlayerChangedListener.onChange(myPlayer);
         }
-
-        this.myPlayer = myPlayer;
     }
 
     private OnMyPlayerChangedListener onMyPlayerChangedListener;
@@ -103,5 +102,18 @@ public class PlayersService {
     public void setEnemyPlayer(Player enemyPlayer) {
         Log.v(TAG, "setEnemyPlayer: " + enemyPlayer.getUid() + " " + enemyPlayer.getPlayingAsShape());
         this.enemyPlayer = enemyPlayer;
+
+        if (onEnemyPlayerChangedListener != null) {
+            onEnemyPlayerChangedListener.onChange(enemyPlayer);
+        }
+    }
+
+    private OnEnemyPlayerChangedListener onEnemyPlayerChangedListener;
+    public interface OnEnemyPlayerChangedListener {
+        void onChange(Player enemyPlayer);
+    }
+
+    public void setOnEnemyPlayerChangedListener(OnEnemyPlayerChangedListener onEnemyPlayerChangedListener) {
+        this.onEnemyPlayerChangedListener = onEnemyPlayerChangedListener;
     }
 }
