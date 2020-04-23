@@ -46,7 +46,30 @@ public class MainActivity extends AppCompatActivity implements Shapes {
         setContentView(R.layout.activity_main);
         setupViewModel();
 
+        loadUserData(null);
         anonymousLogin();
+    }
+
+    private void loadUserData(String uid) {
+        String playerJson = prefs.getString(SharedPreferencesNames.MY_PLAYER, null);
+
+        if (playerJson != null) {
+            try {
+                Player player = Player.fromJSONString(playerJson, uid);
+                PlayersService.getInstance().setMyPlayer(player);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Player player = new Player(uid, Shapes.CROSS);
+            PlayersService.getInstance().setMyPlayer(player);
+
+            try {
+                prefs.edit().putString(SharedPreferencesNames.MY_PLAYER, player.toJSONString()).apply();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void anonymousLogin() {
@@ -77,25 +100,7 @@ public class MainActivity extends AppCompatActivity implements Shapes {
         viewModel.setFirebaseUser(user);
 
         if (user != null) {
-            String playerJson = prefs.getString(SharedPreferencesNames.MY_PLAYER, null);
-
-            if (playerJson != null) {
-                try {
-                    Player player = Player.fromJSONString(playerJson, user.getUid());
-                    PlayersService.getInstance().setMyPlayer(player);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                Player player = new Player(user.getUid(), Shapes.CROSS);
-                PlayersService.getInstance().setMyPlayer(player);
-
-                try {
-                    prefs.edit().putString(SharedPreferencesNames.MY_PLAYER, player.toJSONString()).apply();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
+            loadUserData(user.getUid());
         }
     }
 
