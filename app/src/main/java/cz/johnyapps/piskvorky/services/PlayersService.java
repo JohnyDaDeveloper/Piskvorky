@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import cz.johnyapps.piskvorky.entities.Player;
-import cz.johnyapps.piskvorky.shapes.shape.Shape;
+import cz.johnyapps.piskvorky.entities.shapes.shape.Shape;
 
 public class PlayersService {
     private static final String TAG = "PlayersService";

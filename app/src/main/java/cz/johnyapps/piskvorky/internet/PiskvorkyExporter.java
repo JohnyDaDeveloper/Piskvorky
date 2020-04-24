@@ -14,8 +14,8 @@ import cz.johnyapps.piskvorky.entities.Field;
 import cz.johnyapps.piskvorky.entities.Player;
 import cz.johnyapps.piskvorky.services.PiskvorkyService;
 import cz.johnyapps.piskvorky.services.PlayersService;
-import cz.johnyapps.piskvorky.shapes.Shapes;
-import cz.johnyapps.piskvorky.shapes.shape.shapes.NoShape;
+import cz.johnyapps.piskvorky.entities.shapes.Shapes;
+import cz.johnyapps.piskvorky.entities.shapes.shape.shapes.NoShape;
 
 public class PiskvorkyExporter {
     private static final String TAG = "PiskvorkyExporter";

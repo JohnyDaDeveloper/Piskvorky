@@ -13,10 +13,6 @@
 
     <string name="error">Error!</string>
 
-    <string name="cross">Xs</string>
-    <string name="circle">Os</string>
-    <string name="hearth">Hearth</string>
-
     <string name="offline">Offline</string>
     <string name="online">Online</string>
 
@@ -30,6 +26,7 @@
     <string name="copied_to_clipboard">Copied to clipboard!</string>
     <string name="create_online">Create room</string>
     <string name="playing_as">Playing as</string>
+    <string name="playing_player">Playing player:</string>
     <string name="play_offline">Play offline</string>
     <string name="highlight_last_move">Highlight last move</string>
     <string name="preferred_shape">Preferred shape</string>

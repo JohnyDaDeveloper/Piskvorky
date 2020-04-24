@@ -33,11 +33,11 @@ import cz.johnyapps.piskvorky.GameModes;
 import cz.johnyapps.piskvorky.entities.Player;
 import cz.johnyapps.piskvorky.services.PiskvorkyService;
 import cz.johnyapps.piskvorky.services.PlayersService;
-import cz.johnyapps.piskvorky.shapes.Shapes;
-import cz.johnyapps.piskvorky.shapes.shape.Shape;
-import cz.johnyapps.piskvorky.shapes.shape.shapes.Circle;
-import cz.johnyapps.piskvorky.shapes.shape.shapes.Cross;
-import cz.johnyapps.piskvorky.shapes.shape.shapes.Hearth;
+import cz.johnyapps.piskvorky.entities.shapes.Shapes;
+import cz.johnyapps.piskvorky.entities.shapes.shape.Shape;
+import cz.johnyapps.piskvorky.entities.shapes.shape.shapes.Circle;
+import cz.johnyapps.piskvorky.entities.shapes.shape.shapes.Cross;
+import cz.johnyapps.piskvorky.entities.shapes.shape.shapes.Hearth;
 import cz.johnyapps.piskvorky.views.PiskvorkyView;
 
 @SuppressLint("SetTextI18n")
@@ -303,6 +303,13 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
     }
 
     private void showPlayingShape(Shape shape) {
+        Context context = getContext();
+
+        if (context == null) {
+            Log.w(TAG, "showPlayingShape: context is null");
+            return;
+        }
+
         View root = getView();
 
         if (root == null) {
@@ -312,27 +319,31 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
 
         TextView txtPlayingPlayer = root.findViewById(R.id.txtPlayingPlayer);
 
+        int drawable = 0;
+
         switch (shape.getId()) {
             case Cross.ID: {
-                txtPlayingPlayer.setText(R.string.cross);
+                drawable = Shapes.CROSS.getDrawable();
                 break;
             }
 
             case Circle.ID: {
-                txtPlayingPlayer.setText(R.string.circle);
+                drawable = Shapes.CIRCLE.getDrawable();
                 break;
             }
 
             case Hearth.ID: {
-                txtPlayingPlayer.setText(R.string.hearth);
+                drawable = Shapes.HEARTH.getDrawable();
                 break;
             }
 
             default: {
-                txtPlayingPlayer.setText(R.string.error);
+                drawable = Shape.NO_SHAPE.getDrawable();
                 break;
             }
         }
+
+        txtPlayingPlayer.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0);
     }
 
     private void playerWon(Player player) {
@@ -380,5 +391,7 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
                 break;
             }
         }
+
+        txtPlayingPlayer.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
     }
 }

@@ -6,8 +6,8 @@ import android.content.DialogInterface;
 import android.view.View;
 import android.widget.ImageView;
 
-import cz.johnyapps.piskvorky.shapes.Shapes;
-import cz.johnyapps.piskvorky.shapes.shape.Shape;
+import cz.johnyapps.piskvorky.entities.shapes.Shapes;
+import cz.johnyapps.piskvorky.entities.shapes.shape.Shape;
 
 public class ChooseShapeDialog {
     private Context context;

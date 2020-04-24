@@ -8,8 +8,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import cz.johnyapps.piskvorky.shapes.Shapes;
-import cz.johnyapps.piskvorky.shapes.shape.Shape;
+import cz.johnyapps.piskvorky.entities.shapes.Shapes;
+import cz.johnyapps.piskvorky.entities.shapes.shape.Shape;
 
 public class Player {
     private static final String PREFERRED_SHAPE = "preferredShape";

@@ -25,7 +25,7 @@ import cz.johnyapps.piskvorky.SharedPreferencesNames;
 import cz.johnyapps.piskvorky.entities.Player;
 import cz.johnyapps.piskvorky.services.PiskvorkyService;
 import cz.johnyapps.piskvorky.services.PlayersService;
-import cz.johnyapps.piskvorky.shapes.Shapes;
+import cz.johnyapps.piskvorky.entities.shapes.Shapes;
 import cz.johnyapps.piskvorky.ui.main.MainViewModel;
 import cz.johnyapps.piskvorky.ui.piskvorky.PiskvorkyFragment;
 import cz.johnyapps.piskvorky.ui.start.StartScreenFragment;

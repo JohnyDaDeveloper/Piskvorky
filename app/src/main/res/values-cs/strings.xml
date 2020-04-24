@@ -3,7 +3,7 @@
 
     <string name="cross_won">Křížky vyhráli!</string>
     <string name="circle_won">Kolečka vyhráli!</string>
-    <string name="heart_won">Srdíčka vyhlráli!</string>
+    <string name="heart_won">Srdíčka vyhlrála!</string>
     <string name="unknown_won">Někdo vyhrál! Ale nevíme kdo :/</string>
 
     <string name="dialog_choose_shape">Výběr tvaru</string>
@@ -12,10 +12,6 @@
     <string name="waiting_for_opponent">Čekáme na oponenta…</string>
 
     <string name="error">Chyba!</string>
-
-    <string name="cross">Křížky</string>
-    <string name="circle">Kolečka</string>
-    <string name="hearth">Srdíčka</string>
 
     <string name="offline">Offline</string>
     <string name="online">Online</string>
@@ -30,6 +26,7 @@
     <string name="copied_to_clipboard">Zkopírováno do schránky!</string>
     <string name="create_online">Založit místnost</string>
     <string name="playing_as">Hraješ za</string>
+    <string name="playing_player">Hrající hráč:</string>
     <string name="play_offline">Hrát offline</string>
     <string name="highlight_last_move">Zvýrazňit poslední tah</string>
     <string name="preferred_shape">Preferovaný tvar</string>

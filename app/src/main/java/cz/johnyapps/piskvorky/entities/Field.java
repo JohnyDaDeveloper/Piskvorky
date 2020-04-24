@@ -1,7 +1,7 @@
 package cz.johnyapps.piskvorky.entities;
 
-import cz.johnyapps.piskvorky.shapes.Shapes;
-import cz.johnyapps.piskvorky.shapes.shape.Shape;
+import cz.johnyapps.piskvorky.entities.shapes.Shapes;
+import cz.johnyapps.piskvorky.entities.shapes.shape.Shape;
 
 public class Field implements Shapes {
     private float widthStart;

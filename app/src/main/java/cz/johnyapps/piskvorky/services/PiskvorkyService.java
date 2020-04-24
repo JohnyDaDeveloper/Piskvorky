@@ -24,9 +24,9 @@ import cz.johnyapps.piskvorky.GameModes;
 import cz.johnyapps.piskvorky.entities.Player;
 import cz.johnyapps.piskvorky.internet.PiskvorkyExporter;
 import cz.johnyapps.piskvorky.internet.PiskvorkyImporter;
-import cz.johnyapps.piskvorky.shapes.Shapes;
-import cz.johnyapps.piskvorky.shapes.shape.shapes.Circle;
-import cz.johnyapps.piskvorky.shapes.shape.shapes.Cross;
+import cz.johnyapps.piskvorky.entities.shapes.Shapes;
+import cz.johnyapps.piskvorky.entities.shapes.shape.shapes.Circle;
+import cz.johnyapps.piskvorky.entities.shapes.shape.shapes.Cross;
 
 public class PiskvorkyService implements Shapes, GameModes {
     private static final String TAG = "PiskvorkyService";

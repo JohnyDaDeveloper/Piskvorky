@@ -1,10 +1,11 @@
-package cz.johnyapps.piskvorky.shapes.shape.shapes;
+package cz.johnyapps.piskvorky.entities.shapes.shape.shapes;
 
 import android.content.Context;
 import android.graphics.Canvas;
 
+import cz.johnyapps.piskvorky.R;
 import cz.johnyapps.piskvorky.entities.Field;
-import cz.johnyapps.piskvorky.shapes.shape.Shape;
+import cz.johnyapps.piskvorky.entities.shapes.shape.Shape;
 
 public class NoShape extends Shape {
     public static final int ID = 0;
@@ -21,6 +22,6 @@ public class NoShape extends Shape {
 
     @Override
     public int getDrawable() {
-        return -1;
+        return R.drawable.error;
     }
 }

@@ -28,7 +28,7 @@ import cz.johnyapps.piskvorky.SharedPreferencesNames;
 import cz.johnyapps.piskvorky.entities.Player;
 import cz.johnyapps.piskvorky.services.PiskvorkyService;
 import cz.johnyapps.piskvorky.services.PlayersService;
-import cz.johnyapps.piskvorky.shapes.shape.Shape;
+import cz.johnyapps.piskvorky.entities.shapes.shape.Shape;
 import cz.johnyapps.piskvorky.ui.main.MainViewModel;
 
 public class StartScreenFragment extends Fragment {

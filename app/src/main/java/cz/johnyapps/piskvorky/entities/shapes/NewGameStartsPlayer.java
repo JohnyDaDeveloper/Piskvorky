@@ -1,4 +1,4 @@
-package cz.johnyapps.piskvorky.shapes;
+package cz.johnyapps.piskvorky.entities.shapes;
 
 import cz.johnyapps.piskvorky.entities.Player;
 import cz.johnyapps.piskvorky.services.PlayersService;

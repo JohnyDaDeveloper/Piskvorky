@@ -1,4 +1,4 @@
-package cz.johnyapps.piskvorky.shapes.shape;
+package cz.johnyapps.piskvorky.entities.shapes.shape;
 
 import android.content.Context;
 import android.graphics.Canvas;
