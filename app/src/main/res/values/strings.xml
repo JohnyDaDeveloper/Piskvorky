@@ -1,36 +1,36 @@
 <resources>
-    <string name="app_name">Piškvorky</string>
+    <string name="app_name">Tic tac toe</string>
 
-    <string name="cross_won">Křížky vyhráli!</string>
-    <string name="circle_won">Kolečka vyhráli!</string>
-    <string name="heart_won">Srdíčka vyhlráli!</string>
-    <string name="unknown_won">Někdo vyhrál! Ale nevíme kdo :/</string>
+    <string name="cross_won">Xs won!</string>
+    <string name="circle_won">Os won!</string>
+    <string name="heart_won">Hearths won!</string>
+    <string name="unknown_won">Somebody won! But we are not sure who :/</string>
 
-    <string name="dialog_choose_shape">Výběr tvaru</string>
+    <string name="dialog_choose_shape">Choose shape</string>
 
-    <string name="loading">Načítání…</string>
-    <string name="waiting_for_opponent">Čekáme na oponenta…</string>
+    <string name="loading">Loading…</string>
+    <string name="waiting_for_opponent">Waiting for opponent…</string>
 
-    <string name="error">Chyba!</string>
+    <string name="error">Error!</string>
 
-    <string name="cross">Křížky</string>
-    <string name="circle">Kolečka</string>
-    <string name="hearth">Srdíčka</string>
+    <string name="cross">Xs</string>
+    <string name="circle">Os</string>
+    <string name="hearth">Hearth</string>
 
     <string name="offline">Offline</string>
     <string name="online">Online</string>
 
     <string name="ok">OK</string>
-    <string name="cancel">Zrušit</string>
-    <string name="change">Změnit</string>
-    <string name="join">Připojit</string>
+    <string name="cancel">Cancel</string>
+    <string name="change">Change</string>
+    <string name="join">Join</string>
 
-    <string name="room_id">ID místnosti</string>
+    <string name="room_id">Room id</string>
     <string name="no_room">no room</string>
-    <string name="coppied_to_clipboard">Zkopírováno do schránky!</string>
-    <string name="create_online">Založit místnost</string>
-    <string name="playing_as">Hraješ za</string>
-    <string name="play_offline">Hrát offline</string>
-    <string name="highlight_last_move">Zvýrazňit poslední tah</string>
-    <string name="preferred_shape">Preferovaný tvar</string>
+    <string name="copied_to_clipboard">Copied to clipboard!</string>
+    <string name="create_online">Create room</string>
+    <string name="playing_as">Playing as</string>
+    <string name="play_offline">Play offline</string>
+    <string name="highlight_last_move">Highlight last move</string>
+    <string name="preferred_shape">Preferred shape</string>
 </resources>

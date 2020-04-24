@@ -299,7 +299,7 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
         ClipData clip = ClipData.newPlainText(roomId, PiskvorkyService.getInstance().getGameId());
         clipboard.setPrimaryClip(clip);
 
-        Snackbar.make(root, R.string.coppied_to_clipboard, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(root, R.string.copied_to_clipboard, Snackbar.LENGTH_LONG).show();
     }
 
     private void showPlayingShape(Shape shape) {
