@@ -28,6 +28,6 @@
     <string name="playing_as">Hraješ za</string>
     <string name="playing_player">Hrající hráč:</string>
     <string name="play_offline">Hrát offline</string>
-    <string name="highlight_last_move">Zvýrazňit poslední tah</string>
+    <string name="highlight_last_move">Zvýraznit poslední tah</string>
     <string name="preferred_shape">Preferovaný tvar</string>
 </resources>
