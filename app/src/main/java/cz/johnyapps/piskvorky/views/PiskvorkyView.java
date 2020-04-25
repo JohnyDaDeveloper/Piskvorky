@@ -1,14 +1,19 @@
 package cz.johnyapps.piskvorky.views;
 
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.annotation.ColorInt;
 
 import java.util.ArrayList;
 
@@ -34,6 +39,7 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
     private BoardSettings boardSettings;
     private ShapeDrawer shapeDrawer;
     private Paint lastMovePaint;
+    private @ColorInt int backgroundColor;
 
     private String messageToDraw;
     private boolean waitingForOpponent;
@@ -55,6 +61,7 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
 
     private void initialize() {
         setKeepScreenOn(true);
+        updateBackgroundColor();
 
         waitingForOpponent = false;
 
@@ -105,9 +112,15 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
     }
 
     @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        updateBackgroundColor();
+    }
+
+    @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        canvas.drawColor(Color.WHITE);
+        canvas.drawColor(backgroundColor);
 
         drawCenteredMessage(canvas);
 
@@ -129,6 +142,13 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
                 onShapeWonListener.onShapeWon(shape);
             }
         }
+    }
+
+    private void updateBackgroundColor() {
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = getContext().getTheme();
+        theme.resolveAttribute(R.attr.backgroundColor, typedValue, true);
+        backgroundColor = typedValue.data;
     }
 
     private void drawCenteredMessage(Canvas canvas) {
