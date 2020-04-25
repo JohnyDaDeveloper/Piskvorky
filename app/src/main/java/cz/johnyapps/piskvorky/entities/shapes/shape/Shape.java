@@ -1,9 +1,10 @@
 package cz.johnyapps.piskvorky.entities.shapes.shape;
 
 import cz.johnyapps.piskvorky.entities.shapes.Shapes;
+import cz.johnyapps.piskvorky.entities.shapes.shape.custom.Paw;
 import cz.johnyapps.piskvorky.entities.shapes.shape.shapes.Circle;
 import cz.johnyapps.piskvorky.entities.shapes.shape.shapes.Cross;
-import cz.johnyapps.piskvorky.entities.shapes.shape.shapes.Hearth;
+import cz.johnyapps.piskvorky.entities.shapes.shape.custom.Hearth;
 
 public abstract class Shape implements ShapeInterface, Shapes {
     public static Shape idToShape(int id) {
@@ -18,6 +19,10 @@ public abstract class Shape implements ShapeInterface, Shapes {
 
             case Hearth.ID: {
                 return HEARTH;
+            }
+
+            case Paw.ID: {
+                return PAW;
             }
 
             default: {

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,13 +32,14 @@ import cz.johnyapps.piskvorky.SharedPreferencesNames;
 import cz.johnyapps.piskvorky.entities.Field;
 import cz.johnyapps.piskvorky.GameModes;
 import cz.johnyapps.piskvorky.entities.Player;
+import cz.johnyapps.piskvorky.entities.shapes.shape.custom.Paw;
 import cz.johnyapps.piskvorky.services.PiskvorkyService;
 import cz.johnyapps.piskvorky.services.PlayersService;
 import cz.johnyapps.piskvorky.entities.shapes.Shapes;
 import cz.johnyapps.piskvorky.entities.shapes.shape.Shape;
 import cz.johnyapps.piskvorky.entities.shapes.shape.shapes.Circle;
 import cz.johnyapps.piskvorky.entities.shapes.shape.shapes.Cross;
-import cz.johnyapps.piskvorky.entities.shapes.shape.shapes.Hearth;
+import cz.johnyapps.piskvorky.entities.shapes.shape.custom.Hearth;
 import cz.johnyapps.piskvorky.views.PiskvorkyView;
 
 @SuppressLint("SetTextI18n")
@@ -319,7 +321,7 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
 
         TextView txtPlayingPlayer = root.findViewById(R.id.txtPlayingPlayer);
 
-        int drawable = 0;
+        int drawable;
 
         switch (shape.getId()) {
             case Cross.ID: {
@@ -334,6 +336,11 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
 
             case Hearth.ID: {
                 drawable = Shapes.HEARTH.getDrawable();
+                break;
+            }
+
+            case Paw.ID: {
+                drawable = Shapes.PAW.getDrawable();
                 break;
             }
 
@@ -368,25 +375,26 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
         Shape shape = player.getPlayingAsShape();
         switch (shape.getId()) {
             case Cross.ID: {
-                Toast.makeText(getContext(), R.string.cross_won, Toast.LENGTH_SHORT).show();
                 txtPlayingPlayer.setText(R.string.cross_won);
                 break;
             }
 
             case Circle.ID: {
-                Toast.makeText(getContext(), R.string.circle_won, Toast.LENGTH_SHORT).show();
                 txtPlayingPlayer.setText(R.string.circle_won);
                 break;
             }
 
             case Hearth.ID: {
-                Toast.makeText(getContext(), R.string.heart_won, Toast.LENGTH_SHORT).show();
                 txtPlayingPlayer.setText(R.string.heart_won);
                 break;
             }
 
+            case Paw.ID: {
+                txtPlayingPlayer.setText(R.string.paws_won);
+                break;
+            }
+
             default: {
-                Toast.makeText(getContext(), R.string.unknown_won, Toast.LENGTH_SHORT).show();
                 txtPlayingPlayer.setText(R.string.unknown_won);
                 break;
             }

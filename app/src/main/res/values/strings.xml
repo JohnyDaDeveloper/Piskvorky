@@ -4,6 +4,7 @@
     <string name="cross_won">Xs won!</string>
     <string name="circle_won">Os won!</string>
     <string name="heart_won">Hearths won!</string>
+    <string name="paws_won">Paws won!</string>
     <string name="unknown_won">Somebody won! But we are not sure who :/</string>
 
     <string name="dialog_choose_shape">Choose shape</string>
