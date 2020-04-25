@@ -7,7 +7,7 @@
 
     <style name="Button.Primary" parent="@style/Widget.AppCompat.Button.Colored">
         <item name="android:colorButtonNormal">?attr/colorPrimary</item>
-        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:textColor">?android:textColorPrimaryInverse</item>
 
         <item name="android:paddingTop">20dp</item>
         <item name="android:paddingBottom">20dp</item>

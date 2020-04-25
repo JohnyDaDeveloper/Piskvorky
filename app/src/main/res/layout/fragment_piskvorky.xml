@@ -43,6 +43,7 @@
             android:layout_toEndOf="@+id/roomIdTextView"
             android:layout_marginStart="10dp"
             android:layout_centerVertical="true"
+            android:tint="?attr/colorControlNormal"
             android:src="@drawable/share" />
     </RelativeLayout>
 
