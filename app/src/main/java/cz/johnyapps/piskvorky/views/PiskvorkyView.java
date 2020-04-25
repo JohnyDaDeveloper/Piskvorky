@@ -2,14 +2,12 @@ package cz.johnyapps.piskvorky.views;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -17,6 +15,7 @@ import androidx.annotation.ColorInt;
 
 import java.util.ArrayList;
 
+import cz.johnyapps.piskvorky.DeviceUtils;
 import cz.johnyapps.piskvorky.GameModes;
 import cz.johnyapps.piskvorky.R;
 import cz.johnyapps.piskvorky.entities.BoardSettings;
@@ -145,10 +144,7 @@ public class PiskvorkyView extends View implements View.OnTouchListener, Shapes,
     }
 
     private void updateBackgroundColor() {
-        TypedValue typedValue = new TypedValue();
-        Resources.Theme theme = getContext().getTheme();
-        theme.resolveAttribute(R.attr.backgroundColor, typedValue, true);
-        backgroundColor = typedValue.data;
+        backgroundColor = DeviceUtils.getBackgroundColor(getContext());
     }
 
     private void drawCenteredMessage(Canvas canvas) {

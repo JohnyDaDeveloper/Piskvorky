@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import cz.johnyapps.piskvorky.DeviceUtils;
 import cz.johnyapps.piskvorky.R;
 import cz.johnyapps.piskvorky.entities.Field;
 import cz.johnyapps.piskvorky.entities.shapes.shape.Shape;
@@ -24,13 +25,11 @@ public class Circle extends Shape {
         paint.setColor(Color.RED);
 
         Paint painInner = new Paint();
-        painInner.setColor(Color.WHITE);
+        painInner.setColor(DeviceUtils.getBackgroundColor(context));
 
         canvas.drawCircle(start, top, size, paint);
         canvas.drawCircle(start, top, size - shapeWidth, painInner);
     }
-
-
 
     @Override
     public int getId() {
