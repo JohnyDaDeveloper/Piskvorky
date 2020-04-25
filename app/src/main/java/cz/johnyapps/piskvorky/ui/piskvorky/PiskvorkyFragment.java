@@ -31,7 +31,9 @@ import cz.johnyapps.piskvorky.SharedPreferencesNames;
 import cz.johnyapps.piskvorky.entities.Field;
 import cz.johnyapps.piskvorky.GameModes;
 import cz.johnyapps.piskvorky.entities.Player;
+import cz.johnyapps.piskvorky.entities.shapes.shape.custom.Flame;
 import cz.johnyapps.piskvorky.entities.shapes.shape.custom.Paw;
+import cz.johnyapps.piskvorky.entities.shapes.shape.custom.Star;
 import cz.johnyapps.piskvorky.services.PiskvorkyService;
 import cz.johnyapps.piskvorky.services.PlayersService;
 import cz.johnyapps.piskvorky.entities.shapes.Shapes;
@@ -343,12 +345,23 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
                 break;
             }
 
+            case Star.ID: {
+                drawable = Shapes.STAR.getDrawable();
+                break;
+            }
+
+            case Flame.ID: {
+                drawable = Shapes.FLAME.getDrawable();
+                break;
+            }
+
             default: {
                 drawable = Shape.NO_SHAPE.getDrawable();
                 break;
             }
         }
 
+        txtPlayingPlayer.setText(R.string.playing_player);
         txtPlayingPlayer.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable, 0);
     }
 
@@ -390,6 +403,16 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
 
             case Paw.ID: {
                 txtPlayingPlayer.setText(R.string.paws_won);
+                break;
+            }
+
+            case Star.ID: {
+                txtPlayingPlayer.setText(R.string.stars_won);
+                break;
+            }
+
+            case Flame.ID: {
+                txtPlayingPlayer.setText(R.string.flames_won);
                 break;
             }
 

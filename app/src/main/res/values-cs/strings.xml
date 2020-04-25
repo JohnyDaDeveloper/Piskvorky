@@ -5,6 +5,8 @@
     <string name="circle_won">Kolečka vyhráli!</string>
     <string name="heart_won">Srdíčka vyhlrála!</string>
     <string name="paws_won">Packy vyhlráli!</string>
+    <string name="stars_won">Hvězdy vyhlráli!</string>
+    <string name="flames_won">Plamínky vyhlráli!</string>
     <string name="unknown_won">Někdo vyhrál! Ale nevíme kdo :/</string>
 
     <string name="dialog_choose_shape">Výběr tvaru</string>
