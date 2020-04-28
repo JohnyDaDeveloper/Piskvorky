@@ -7,6 +7,7 @@
     <string name="paws_won">Paws won!</string>
     <string name="stars_won">Stars won!</string>
     <string name="flames_won">Flames won!</string>
+    <string name="poop_won">Poop won!</string>
     <string name="unknown_won">Somebody won! But we are not sure who :/</string>
 
     <string name="dialog_choose_shape">Choose shape</string>

@@ -7,6 +7,7 @@
     <string name="paws_won">Packy vyhlráli!</string>
     <string name="stars_won">Hvězdy vyhlráli!</string>
     <string name="flames_won">Plamínky vyhlráli!</string>
+    <string name="poop_won">Hovínka vyhrála!</string>
     <string name="unknown_won">Někdo vyhrál! Ale nevíme kdo :/</string>
 
     <string name="dialog_choose_shape">Výběr tvaru</string>

@@ -33,6 +33,7 @@ import cz.johnyapps.piskvorky.GameModes;
 import cz.johnyapps.piskvorky.entities.Player;
 import cz.johnyapps.piskvorky.entities.shapes.shape.custom.Flame;
 import cz.johnyapps.piskvorky.entities.shapes.shape.custom.Paw;
+import cz.johnyapps.piskvorky.entities.shapes.shape.custom.Poop;
 import cz.johnyapps.piskvorky.entities.shapes.shape.custom.Star;
 import cz.johnyapps.piskvorky.services.PiskvorkyService;
 import cz.johnyapps.piskvorky.services.PlayersService;
@@ -355,6 +356,11 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
                 break;
             }
 
+            case Poop.ID: {
+                drawable = Shapes.POOP.getDrawable();
+                break;
+            }
+
             default: {
                 drawable = Shape.NO_SHAPE.getDrawable();
                 break;
@@ -413,6 +419,11 @@ public class PiskvorkyFragment extends Fragment implements Shapes, GameModes {
 
             case Flame.ID: {
                 txtPlayingPlayer.setText(R.string.flames_won);
+                break;
+            }
+
+            case Poop.ID: {
+                txtPlayingPlayer.setText(R.string.poop_won);
                 break;
             }
 

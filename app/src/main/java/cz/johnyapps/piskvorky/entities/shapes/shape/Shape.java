@@ -3,6 +3,7 @@ package cz.johnyapps.piskvorky.entities.shapes.shape;
 import cz.johnyapps.piskvorky.entities.shapes.Shapes;
 import cz.johnyapps.piskvorky.entities.shapes.shape.custom.Flame;
 import cz.johnyapps.piskvorky.entities.shapes.shape.custom.Paw;
+import cz.johnyapps.piskvorky.entities.shapes.shape.custom.Poop;
 import cz.johnyapps.piskvorky.entities.shapes.shape.custom.Star;
 import cz.johnyapps.piskvorky.entities.shapes.shape.shapes.Circle;
 import cz.johnyapps.piskvorky.entities.shapes.shape.shapes.Cross;
@@ -33,6 +34,10 @@ public abstract class Shape implements ShapeInterface, Shapes {
 
             case Flame.ID: {
                 return FLAME;
+            }
+
+            case Poop.ID: {
+                return POOP;
             }
 
             default: {
