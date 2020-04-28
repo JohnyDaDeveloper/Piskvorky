@@ -11,6 +11,6 @@ public class Poop extends CustomShape {
 
     @Override
     public int getId() {
-        return 0;
+        return ID;
     }
 }
